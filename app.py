@@ -2,7 +2,6 @@
 
 # lsof -i tcp:5500
 # kill -9   24579 
-# test
 
 from flask import Flask, request, render_template, jsonify
 from experiment import Experiment
