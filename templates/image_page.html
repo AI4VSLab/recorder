@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Page</title>
+	<script src="../static/jquery.min.js"></script>
+	<style>
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+            font-family: Helvetica;
+		}
+		.slid_org {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+		.slider {
+			width: 45vw;
+		}
+		.slider_info {
+			display: flex;
+			width:100px;
+			flex-direction: column;
+		}
+		.textbox {
+			width: 50%;
+			height: 100px;
+			margin-top: 20px;
+			font-size: 20px;
+			text-align: center;
+			border: 2px solid black;
+			border-radius: 10px;
+			padding: 10px;
+			resize: none;
+		}
+		.submit-btn {
+            border: 2px solid black;
+			margin-top: 20px;
+			font-size: 20px;
+			padding: 10px 20px;
+			border-radius: 10px;
+			background-color: #4CAF50;
+			color: white;
+			cursor: pointer;
+		}
+		.submit-btn.disabled {
+            border: 2px solid black;
+			background-color: white;
+			cursor: not-allowed;
+		}
+		.success-btn {
+            border: 2px solid black;
+            background-color: white;
+			color: green;
+			cursor: not-allowed;
+		}
+		.error-btn {
+            border: 2px solid black;
+            background-color: white;
+			color: red;
+			cursor: not-allowed;
+		}
+
+        .zeiss-img {
+            width: 700px;
+        }
+	</style>
+</head>
+<body>
+	<!-- This div is at the top left like a logo: -->
+	<div style="position: absolute; top: 0; left: 0; padding: 10px;">
+		<span style="font-size: 2em;">AI4VS LAB</h1>
+	</div>
+	<div class="container">
+		<h3>Please provide a glaucoma rating:</h3>
+        <img src="{{ image_url }}" alt="Image to rate" class="zeiss-img">
+		<!-- Guidelines -->
+		<table style="font-family: monospace; background-color: rgba(211, 211, 211, 0.5); border-radius: 10px; padding: 10px;">
+			<tr>
+				<td style="text-align: right; font-weight: bold;">Guidelines</td>
+				<td style="text-align: left;"></td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">0-5:</td>
+				<td style="text-align: left;">Definitely No Glaucoma</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">6-39:</td>
+				<td style="text-align: left;">Probably No Glaucoma</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">40-49:</td>
+				<td style="text-align: left;">No Glaucoma, If Forced</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">50:</td>
+				<td style="text-align: left;">Unrated</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">51-60:</td>
+				<td style="text-align: left;">Glaucoma, If Forced</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">61-94:</td>
+				<td style="text-align: left;">Probably Glaucoma</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">95-100:</td>
+				<td style="text-align: left;">Definitely Glaucoma</td>
+			</tr>
+		</table>
+
+        <br>
+		<br>
+		<div class = "slid_org">
+			<div class = "slider_info" style="align-items: end;">
+				<div>
+					HEALTHY
+				</div>
+				<div>
+					<b>(0)</b>
+				</div>
+			</div>
+			<input class = "slider" type="range" value="50" min="0" max="100" oninput="document.getElementById('slider-value').value = this.value">
+			<div class = "slider_info" style="align-items: start;">
+				<div>
+					GLAUCOMA
+				</div>
+				<div>
+					<b>(100)</b>
+				</div>
+			</div>
+		</div>
+        <span>Score: <output id = "slider-value">50</output></span>
+		<br>
+		<textarea class="textbox"></textarea>
+		<button class="submit-btn">Submit</button>
+
+        <br>
+        <br>
+        <span>Progress: <span id = "curr_count"></span> / <span id = "total"></span></span>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+            var pathArray = window.location.pathname.split('/');
+            var imageIdIndex = pathArray.indexOf('image') + 1;
+            var imageId = pathArray.length > imageIdIndex ? pathArray[imageIdIndex] : null;
+            console.log(imageId);
+
+            $.get('/get_status', function(data) {
+				$('#curr_count').text(data.current);
+				$('#total').text(data.total);
+			});
+
+			$('.submit-btn').click(function() {
+				var sliderVal = $('.slider').val();
+				var textVal = $('.textbox').val();
+				$(this).prop('disabled', true);
+				$.ajax({
+					type: 'POST',
+					url: '/image/' + imageId,
+					data: {'slider': sliderVal, 'text': textVal},
+					success: function(response) {
+						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
+					},
+					error: function() {
+						$('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');
+					},
+					complete: function() {
+						$('.submit-btn').prop('disabled', true);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

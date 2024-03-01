@@ -3,7 +3,7 @@
 # lsof -i tcp:5500
 # kill -9   24579 
 
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, url_for
 from experiment import Experiment
 
 app = Flask(__name__)
@@ -19,6 +19,19 @@ def home():
         # Insert empty row as soon as page is called incase they dont submit anything
         exp.update_empty()
         return render_template('home.html')
+    
+# ZEISS RECORDER - IMAGES & TEXT INPUT ROUTE
+@app.route('/image/<int:image_id>', methods=['GET', 'POST'])
+def image_page(image_id):
+    if request.method == 'POST':
+        # Update the last row with the form data
+        exp.update_last_row(request.form['text'], request.form['slider'])
+        return "success"
+    else:
+        # Insert empty row as soon as page is called incase they dont submit anything
+        exp.update_empty()
+        image_url = url_for('static', filename='images/' + str(image_id) + '.png')
+        return render_template('image_page.html', image_id=image_id, image_url=image_url)
 
 @app.route('/controller', methods=['GET'])
 def controller():
