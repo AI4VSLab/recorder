@@ -26,8 +26,9 @@ class Experiment:
     def update_empty(self, text = "Empty", score = "Empty"):
         # First append empty as soon as any update is to be made
         self.cur_count += 1
-        new_row = {'text': text, 'score': score, 'time': self.get_time()}
-        self.df = self.df.append(new_row, ignore_index=True)
+        new_row = pd.DataFrame([{'text': text, 'score': score, 'time': self.get_time()}])
+        self.df = pd.concat([self.df, new_row], ignore_index=True)
+
         if self.ACTIVE: self.df.to_csv(self.csv_path, index=True)
 
     def update_last_row(self, text = "Empty", score = "Empty"):
