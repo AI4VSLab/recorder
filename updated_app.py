@@ -1,4 +1,3 @@
-
 # AI4VS App to collect data from the expert
 
 import threading
@@ -7,6 +6,8 @@ from flask import Flask, request, render_template, jsonify, url_for
 from experiment import Experiment
 import wave
 import audioop
+import os
+import subprocess
 
 app = Flask(__name__)
 exp = Experiment()
@@ -21,14 +22,17 @@ shared_state = SharedState()
 # This dictionary represents the shared state for recording
 recording_state = {'is_recording': False, 'thread': None}
 
-def record_audio():
+def record_audio(image_id,exp_id):
     # Define the basic parameters for recording
     CHUNK = 1024  # Number of audio frames per buffer
     FORMAT = pyaudio.paInt16  # Audio format (16-bit integer)
     CHANNELS = 1  # Number of audio channels
     RATE = 44100  # Sampling rate (samples per second)
-    OUTPUT_FILENAME = "output.wav"  # Output file name
-    THRESHOLD = 500  # Threshold for audio level (example condition)
+
+    # make folder if doesn't exists
+    if not os.path.exists(f'audio/${exp_id}'): os.makedirs(f'audio/${exp_id}')
+
+    OUTPUT_FILENAME = f"audio/${exp_id}/${image_id}_output.wav"  # Output file name
 
     # Initialize PyAudio
     p = pyaudio.PyAudio()
@@ -66,8 +70,23 @@ def record_audio():
     wf.close()
 
     # TODO: upload to google cloud bucket 
+    script_path = 'push2git.sh'
+    # Call the script
+    result = subprocess.run([script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Output the result
+    print("stdout:", result.stdout)
+    print("stderr:", result.stderr)
 
     # TODO: call google cloud sdk using
+
+
+
+
+
+# Define the path to the script
+
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -85,7 +104,7 @@ def image_page(image_id):
     # Start recording when this page is accessed
     if not recording_state['is_recording']:
         recording_state['is_recording'] = True
-        recording_thread = threading.Thread(target=record_audio)
+        recording_thread = threading.Thread(target=record_audio(image_id,exp.exp_id))
         recording_thread.start()
         recording_state['thread'] = recording_thread
 
