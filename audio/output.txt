@@ -1,0 +1,19 @@
+File: $1_output.wav
+{
+    "requestId": "5388080143935728946",
+    "results": [
+        {
+            "alternatives": [
+                {
+                    "confidence": 0.83656466,
+                    "transcript": "let's go to consider dating here. Evac here before push"
+                }
+            ],
+            "languageCode": "en-us",
+            "resultEndTime": "11.870s"
+        }
+    ],
+    "totalBilledTime": "12s",
+    "usingLegacyModels": true
+}
+
