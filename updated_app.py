@@ -16,6 +16,11 @@ class SharedState:
     def __init__(self):
         self.current_endpoint = '/'
 
+
+MAX_THREADS = 2  # Number of threads that can run concurrently.
+pool = ThreadPool(processes=MAX_THREADS)
+
+
 # Create an instance of the shared state
 shared_state = SharedState()
 
@@ -72,12 +77,14 @@ def record_audio(image_id,exp_id):
     # TODO: upload to google cloud bucket 
     script_path = 'push2git.sh'
     # Call the script
+    
+    '''
     result = subprocess.run([script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # Output the result
     print("stdout:", result.stdout)
     print("stderr:", result.stderr)
-
+    '''
     # TODO: call google cloud sdk using
 
 
@@ -101,28 +108,35 @@ def home():
 
 @app.route('/image/<int:image_id>', methods=['GET', 'POST'])
 def image_page(image_id):
-    # Start recording when this page is accessed
-    if not recording_state['is_recording']:
-        recording_state['is_recording'] = True
-        recording_thread = threading.Thread(target=record_audio(image_id,exp.exp_id))
-        recording_thread.start()
-        recording_state['thread'] = recording_thread
 
-    shared_state.current_endpoint = f'image/{image_id}'
+    
     if request.method == 'POST':
+        print('submitt clicked!')
+        # Stop recording when this page is accessed
+        if recording_state['is_recording']:
+            recording_state['is_recording'] = False
+            recording_state['thread'].join()  # Wait for the thread to finish
+
         exp.update_last_row(request.form['text'], request.form['slider'])
         return "success"
     else:
+        # Start recording when this page is accessed
+        if not recording_state['is_recording']:  
+            recording_state['is_recording'] = True
+            recording_thread = threading.Thread(target=record_audio, args=(image_id,exp.exp_id))
+            #recording_thread.daemon = True
+            recording_state['thread'] = recording_thread
+            recording_thread.start()
+
         exp.update_empty()
         image_url = url_for('static', filename='images/' + str(image_id) + '.png')
         return render_template('image_page.html', image_id=image_id, image_url=image_url)
+    
+    
 
 @app.route('/controller', methods=['GET'])
 def controller():
-    # Stop recording when this page is accessed
-    if recording_state['is_recording']:
-        recording_state['is_recording'] = False
-        recording_state['thread'].join()  # Wait for the thread to finish
+    
 
     return render_template('control.html')
 
