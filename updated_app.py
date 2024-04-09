@@ -17,8 +17,6 @@ class SharedState:
         self.current_endpoint = '/'
 
 
-MAX_THREADS = 2  # Number of threads that can run concurrently.
-pool = ThreadPool(processes=MAX_THREADS)
 
 
 # Create an instance of the shared state
