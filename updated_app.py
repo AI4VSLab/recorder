@@ -77,11 +77,11 @@ def record_audio(image_id,exp_id):
     # Call the script
     
     
-    result = subprocess.run([script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    #result = subprocess.run([script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # Output the result
-    print("stdout:", result.stdout)
-    print("stderr:", result.stderr)
+    #print("stdout:", result.stdout)
+    #print("stderr:", result.stderr)
     
     # TODO: call google cloud sdk using
 
