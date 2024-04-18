@@ -33,7 +33,7 @@ def record_audio(image_id,exp_id):
     RATE = 44100  # Sampling rate (samples per second)
 
     # make folder if doesn't exists
-    if not os.path.exists(f'audio/${exp_id}'): os.makedirs(f'audio/${exp_id}')
+    if not os.path.exists(f'audio/{exp_id}'): os.makedirs(f'audio/{exp_id}')
 
     OUTPUT_FILENAME = f"audio/{exp_id}/{image_id}_output.wav"  # Output file name
 
