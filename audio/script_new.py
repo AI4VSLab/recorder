@@ -3,6 +3,8 @@ import json
 from subprocess import Popen, PIPE
 import pandas as pd
 from google.cloud import speech
+import sys
+
 
 
 
@@ -51,11 +53,15 @@ def recognize_audio(file_path):
     print("Waiting for operation to complete...")
     result = operation.result(timeout=100000)
 
+    print(result)
+
     return result
 
 def main():
+    arguments = sys.argv[1:]
+    print(sys.argv[1:])
     output_file = "output.txt"
-    folder_path = "$debug"
+    folder_path = arguments[0]
     df_all = pd.DataFrame(columns=['File', 'Transcript'])
 
     
