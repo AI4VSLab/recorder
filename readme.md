@@ -7,6 +7,17 @@
 
 ---
 
+#### Usage:
+
+1. `python app.py`
+2. start experiment with: `http://localhost:5500/controller`
+3. before first iamge go to: `http://localhost:5500/start_exp`
+
+---
+
+
+---
+
 #### Run with:
 
 1. `python app.py`

@@ -60,7 +60,7 @@ class Experiment:
     def start(self, exp_name = "demo", total = 20):
         self.ACTIVE = True
         self.cur_count = 0
-        self.tot_count = total
+        self.tot_count = int(total)
         self.exp_name = exp_name
         self.exp_id = self.exp_name+"_"+ self.get_time()
         self.csv_path = "saves/"+self.exp_id+".csv"
@@ -69,7 +69,8 @@ class Experiment:
     def end(self):
         self.ACTIVE = False
         self.cur_count = 0
-        self.tot_count = 20
+        # commented this out just in case
+        #self.tot_count = 20
         self.exp_name = "debug"
         self.exp_id = "debug"
         self.csv_path = "saves/"+self.exp_id+".csv"
