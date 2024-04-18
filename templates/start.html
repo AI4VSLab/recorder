@@ -29,17 +29,25 @@
         .active {
             background-color: #FFA500; /* Change to orange when active */
         }
+        .info {
+            margin-top: 20px;
+            font-size: 18px;
+            color: black;
+            display: none; /* Hidden by default */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Welcome!</h2>
         <button class="btn" id="start_button" type="button">Start</button>
+        <div id="instruction" class="info">Please Press F10 to continue!</div>
     </div>
     <script>
         $(document).ready(function() {
             $("#start_button").click(function() {
                 $(this).addClass('active');
+                $("#instruction").show(); // Show the instruction
                 // Optionally, send an AJAX request to the server
                 $.ajax({
                     url: '/start_action',
