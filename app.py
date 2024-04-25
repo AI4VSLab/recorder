@@ -171,7 +171,7 @@ def start_recording(image_id):
     '''
 
     recording_state['is_recording'] = True
-    recording_thread = threading.Thread(target=record_audio, args=(image_id,exp.exp_id))
+    recording_thread = threading.Thread(target=record_audio, args=(image_id,exp.exp_id,1))
     recording_state['thread'] = recording_thread
     recording_thread.start()
 
