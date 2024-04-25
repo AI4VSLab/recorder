@@ -25,7 +25,17 @@ shared_state = SharedState()
 # This dictionary represents the shared state for recording
 recording_state = {'is_recording': False, 'thread': None}
 
-def record_audio(image_id,exp_id):
+def list_devices():
+    p = pyaudio.PyAudio()
+    info = p.get_host_api_info_by_index(0)
+    num_devices = info.get('deviceCount')
+    # List all devices with their corresponding index
+    for i in range(0, num_devices):
+        if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+            print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
+    p.terminate()
+
+def record_audio_legacy(image_id,exp_id):
     # Define the basic parameters for recording
     CHUNK = 1024  # Number of audio frames per buffer
     FORMAT = pyaudio.paInt16  # Audio format (16-bit integer)
@@ -46,6 +56,71 @@ def record_audio(image_id,exp_id):
                     rate=RATE,
                     input=True,
                     frames_per_buffer=CHUNK)
+
+    print(f"Recording started for image {image_id}...")
+
+    print(f"Recording audio for the {shared_state.current_endpoint} endpoint...")
+    frames = []
+    while recording_state['is_recording']:
+        # Your audio recording logic here
+        data = stream.read(CHUNK)
+        frames.append(data)
+        # Check the audio level
+        audio_level = audioop.rms(data, 2)  # Get the RMS of the chunk
+
+    print(f"Recording stopped for {image_id}.")
+    # Stop and close the stream
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    # Save the recorded data as a WAV file
+    wf = wave.open(OUTPUT_FILENAME, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+    # TODO: upload to google cloud bucket 
+    script_path = 'push2git.sh'
+    # Call the script
+    
+    
+    #result = subprocess.run([script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Output the result
+    #print("stdout:", result.stdout)
+    #print("stderr:", result.stderr)
+    
+    # TODO: call google cloud sdk using
+
+
+
+
+
+
+def record_audio(image_id, exp_id, input_device_index=None):
+    CHUNK = 1024
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 44100
+    if not os.path.exists(f'audio/{exp_id}'):
+        os.makedirs(f'audio/{exp_id}')
+    OUTPUT_FILENAME = f"audio/{exp_id}/{image_id}_output.wav"
+
+    p = pyaudio.PyAudio()
+
+    # If no specific device is provided, use the default input device
+    if input_device_index is None:
+        input_device_index = p.get_default_input_device_info()['index']
+
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=CHUNK,
+                    input_device_index=input_device_index)
 
     print(f"Recording started for image {image_id}...")
 
