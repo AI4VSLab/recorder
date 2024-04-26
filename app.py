@@ -198,11 +198,11 @@ def home():
 
 
 
-@app.route('/image/<int:image_id>', methods=['GET', 'POST'])
-def image_page(image_id):
-    shared_state.current_endpoint = f'/image/{image_id}'
+@app.route('/image/<patient_id>', methods=['GET', 'POST'])
+def image_page(patient_id):
+    shared_state.current_endpoint = f'/image/{patient_id}'
     if request.method == 'POST':
-        print('submitt clicked!')
+        print('submit clicked!')
         
         # Stop recording when this page is accessed
         if recording_state['is_recording']:
@@ -222,8 +222,11 @@ def image_page(image_id):
             start_recording(exp.cur_count)
 
         exp.update_empty()
-        image_url = url_for('static', filename='images/' + str(image_id) + '.png')
-        return render_template('image_page.html', image_id=image_id, image_url=image_url)
+        image_urls = []
+        for i in range(1, 6):
+            image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+            image_urls.append(image_url)
+        return render_template('image_page.html', patient_id=patient_id, image_urls=image_urls)
     
     
 
