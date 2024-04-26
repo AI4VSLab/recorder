@@ -8,6 +8,7 @@ import wave
 import audioop
 import os
 import subprocess
+import numpy as np
 
 app = Flask(__name__)
 exp = Experiment()
@@ -64,6 +65,7 @@ def record_audio_legacy(image_id,exp_id):
     while recording_state['is_recording']:
         # Your audio recording logic here
         data = stream.read(CHUNK)
+        data = adjust_volume(data, 2)
         frames.append(data)
         # Check the audio level
         audio_level = audioop.rms(data, 2)  # Get the RMS of the chunk
@@ -96,8 +98,12 @@ def record_audio_legacy(image_id,exp_id):
     # TODO: call google cloud sdk using
 
 
-
-
+def adjust_volume(data, factor):
+    audio_array = np.frombuffer(data, dtype=np.int16)
+    adjusted_audio = audio_array.copy()
+    adjusted_audio *= factor
+    adjusted_audio = np.clip(adjusted_audio, -32768, 32767)
+    return adjusted_audio.astype(np.int16).tobytes()
 
 
 def record_audio(image_id, exp_id, input_device_index=None):
@@ -171,7 +177,7 @@ def start_recording(image_id):
     '''
 
     recording_state['is_recording'] = True
-    recording_thread = threading.Thread(target=record_audio, args=(image_id,exp.exp_id,1))
+    recording_thread = threading.Thread(target=record_audio_legacy, args=(image_id,exp.exp_id))
     recording_state['thread'] = recording_thread
     recording_thread.start()
 
