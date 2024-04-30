@@ -134,8 +134,9 @@ def recognize_audio(file_path):
 def main():
     arguments = sys.argv[1:]
     print(sys.argv[1:])
-    output_file = "output.txt"
     folder_path = arguments[0]
+    output_file = str(folder_path) + "_output.csv"
+
     df_all = pd.DataFrame(columns=['File', 'Transcript'])
 
     wav_files = list_files_in_folder("audio_recordings_tobii", folder_path)
@@ -160,7 +161,7 @@ def main():
             except json.JSONDecodeError:
                 print("Error: Unable to decode JSON output")
     delete_flac_files_in_bucket('audio_recordings_tobii')   
-    df_all.to_csv('output.csv', index=False)
+    df_all.to_csv(output_file, index=False)
 
 
 if __name__ == "__main__":
