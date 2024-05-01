@@ -147,7 +147,7 @@ def main():
     df_all = pd.DataFrame(columns=['File', 'Transcript'])
 
     wav_files = list_files_in_folder(bucket_name, folder_path) # audio_recordings_tobii
-    delete_flac_files_in_bucket("audio_recordings_tobii")
+    delete_flac_files_in_bucket(bucket_name)
     delete_flac_files_in_folder(folder_path)
     for wav_file in wav_files:
 
