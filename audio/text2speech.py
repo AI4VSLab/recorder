@@ -132,14 +132,21 @@ def recognize_audio(file_path):
     return result
 
 def main():
+    '''
+    Usage: 
+        argument 1: folder name
+        argument 2: bucket name
+    
+    '''
     arguments = sys.argv[1:]
     print(sys.argv[1:])
     folder_path = arguments[0]
+    bucket_name = arguments[1]
     output_file = str(folder_path) + "_output.csv"
 
     df_all = pd.DataFrame(columns=['File', 'Transcript'])
 
-    wav_files = list_files_in_folder("audio_recordings_tobii", folder_path)
+    wav_files = list_files_in_folder(bucket_name, folder_path) # audio_recordings_tobii
     delete_flac_files_in_bucket("audio_recordings_tobii")
     delete_flac_files_in_folder(folder_path)
     for wav_file in wav_files:
@@ -147,9 +154,9 @@ def main():
 
         if wav_file.name.endswith(".wav"):
             print(wav_file)
-            flac_file = convert_and_upload_files_in_folder('audio_recordings_tobii', folder_path, wav_file.name)
+            flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file.name)
             print(flac_file)
-            gci_file_path = f"gs://audio_recordings_tobii/{flac_file}"
+            gci_file_path = f"gs://{bucket_name}/{flac_file}"
             print(gci_file_path)
             recognition_result = recognize_audio(gci_file_path)
             alt_num = 0
@@ -160,7 +167,7 @@ def main():
                     alt_num+=1
             except json.JSONDecodeError:
                 print("Error: Unable to decode JSON output")
-    delete_flac_files_in_bucket('audio_recordings_tobii')   
+    delete_flac_files_in_bucket(bucket_name)   
     df_all.to_csv(output_file, index=False)
 
 
