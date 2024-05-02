@@ -149,7 +149,7 @@ def main():
     wav_files = list_files_in_folder(bucket_name, folder_path) # audio_recordings_tobii
     print('\n'*3)
     print('printing outfiles')
-    print(wav_files)
+    print([x for x in wav_files])
     print('\n'*3)
     
     delete_flac_files_in_bucket(bucket_name)
