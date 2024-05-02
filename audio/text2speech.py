@@ -95,6 +95,8 @@ def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
         bucket_name: str
         folder_name: str
         wav_file: blob object
+    @return:
+        destination_blob_name: path within bucket
     '''
     print('\n'*5)
     print('convert_and_upload_files_in_folder wav_file', wav_file)
@@ -108,7 +110,7 @@ def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
         upload_to_bucket(bucket_name, flac_file, destination_blob_name)
         print(f"Uploaded {flac_file} to {destination_blob_name}")
         # return os.path.join(folder_name, flac_file)
-        return flac_file
+        return destination_blob_name #flac_file
     else:
         print(f"Failed to convert {wav_file} to FLAC")
         return None
@@ -208,9 +210,7 @@ def main():
             # gcloud takes flac files, need to convert from .wav to .flac using ffmepg. 
             # but ffmepg needs to run on local files (or we can mount), this is the easiet way rn
             flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file)
-            print(flac_file)
             gci_file_path = f"gs://{bucket_name}/{flac_file}"
-            print(gci_file_path)
             recognition_result = recognize_audio(gci_file_path)
             alt_num = 0
             try:
