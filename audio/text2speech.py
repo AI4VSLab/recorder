@@ -63,13 +63,13 @@ def convert_wav_to_flac(wav_file):
 
     print('\n'*5)
 
-    '''
+    
     command = f"ffmpeg -i {temp_wav_path} -ar 44100 {flac_file}"
     print(command)
     process = Popen(command.split(), stdout=PIPE, stderr=PIPE)
     output, error = process.communicate()
     print("output")
-    '''
+    
     print()
 
     return flac_file if os.path.exists(flac_file) else None
