@@ -51,6 +51,9 @@ def convert_wav_to_flac(wav_file):
     # Download the file to a temporary file
     wav_file.download_to_filename(temp_wav_path)
 
+    print('\n'*5)
+    print('temp_wav_path', temp_wav_path)
+    print('\n'*5)
 
     flac_file = os.path.splitext(wav_file)[0] + ".flac"
 
