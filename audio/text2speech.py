@@ -41,6 +41,15 @@ def delete_flac_files_in_bucket(bucket_name):
             print(f"Deleted {blob.name}")
 
 def convert_wav_to_flac(wav_file):
+    import tempfile
+    # download from bucket first
+    #_, temp_wav_path = tempfile.mkstemp(suffix='.wav')
+
+    
+    # Download the file to a temporary file
+    #blob.download_to_filename(temp_wav_path)
+
+
     flac_file = os.path.splitext(wav_file)[0] + ".flac"
 
 
@@ -63,6 +72,10 @@ def upload_to_bucket(bucket_name, local_file_path, destination_blob_name):
     blob.upload_from_filename(local_file_path)
 
 def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
+    print('\n'*5)
+    print('convert_and_upload_files_in_folder wav_file', wav_file)
+    print('\n'*5)
+
 
     flac_file = convert_wav_to_flac(wav_file)
     if flac_file:
@@ -161,10 +174,10 @@ def main():
 
     # delete_flac_files_in_folder used for local storage, ie within the console instance or on a computer locally
     # delete_flac_files_in_folder(folder_path)
+
+    # wav_file is a Blob object
     for wav_file in wav_files:
-        print('\n'*5)
-        print('wav_file', wav_file)
-        print('\n'*5)
+        
 
         if wav_file.name.endswith(".wav"):
             print(wav_file)
