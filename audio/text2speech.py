@@ -85,6 +85,10 @@ def upload_to_bucket(bucket_name, local_file_path, destination_blob_name):
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_filename(local_file_path)
 
+    print('\n'*5)
+    print('blob', blob)
+    print('\n'*5)
+
 def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
     '''
     @params:
