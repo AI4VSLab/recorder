@@ -109,6 +109,11 @@ def recognize_audio(file_path):
     # with open(file_path, "rb") as audio_file:
     #     file_content = audio_file.read()
 
+    print('\n'*5)
+    print('file_path 2 recg', file_path)
+    print('\n'*5)
+
+
     client = speech.SpeechClient()
 
 
