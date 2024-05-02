@@ -43,21 +43,26 @@ def delete_flac_files_in_bucket(bucket_name):
 def convert_wav_to_flac(wav_file):
     import tempfile
     # download from bucket first
-    #_, temp_wav_path = tempfile.mkstemp(suffix='.wav')
+
+    # make a temp file 
+    _, temp_wav_path = tempfile.mkstemp(suffix='.wav')
 
     
     # Download the file to a temporary file
-    #blob.download_to_filename(temp_wav_path)
+    wav_file.download_to_filename(temp_wav_path)
 
 
     flac_file = os.path.splitext(wav_file)[0] + ".flac"
 
-
-    command = f"ffmpeg -i {wav_file} -ar 44100 {flac_file}"
+    '''
+    command = f"ffmpeg -i {temp_wav_path} -ar 44100 {flac_file}"
     print(command)
     process = Popen(command.split(), stdout=PIPE, stderr=PIPE)
     output, error = process.communicate()
     print("output")
+    '''
+    print()
+
     return flac_file if os.path.exists(flac_file) else None
 
 def upload_to_bucket(bucket_name, local_file_path, destination_blob_name):
@@ -72,6 +77,12 @@ def upload_to_bucket(bucket_name, local_file_path, destination_blob_name):
     blob.upload_from_filename(local_file_path)
 
 def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
+    '''
+    @params:
+        bucket_name: str
+        folder_name: str
+        wav_file: blob object
+    '''
     print('\n'*5)
     print('convert_and_upload_files_in_folder wav_file', wav_file)
     print('\n'*5)
@@ -183,7 +194,7 @@ def main():
             print(wav_file)
             # gcloud takes flac files, need to convert from .wav to .flac using ffmepg. 
             # but ffmepg needs to run on local files (or we can mount), this is the easiet way rn
-            flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file.name)
+            flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file)
             print(flac_file)
             gci_file_path = f"gs://{bucket_name}/{flac_file}"
             print(gci_file_path)
