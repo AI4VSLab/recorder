@@ -211,6 +211,8 @@ def main():
             # but ffmepg needs to run on local files (or we can mount), this is the easiet way rn
             flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file)
             gci_file_path = f"gs://{bucket_name}/{flac_file}"
+            print(f'speech2text with this file:{gci_file_path}')
+
             recognition_result = recognize_audio(gci_file_path)
             alt_num = 0
             try:
