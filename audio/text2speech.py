@@ -52,10 +52,14 @@ def convert_wav_to_flac(wav_file):
     wav_file.download_to_filename(temp_wav_path)
 
     print('\n'*5)
-    print('temp_wav_path', temp_wav_path)
-    print('\n'*5)
+    
+    
 
-    flac_file = os.path.splitext(wav_file)[0] + ".flac"
+    flac_file = os.path.splitext(wav_file.name)[0] + ".flac"
+    print('temp_wav_path', temp_wav_path)
+    print('flac_file', flac_file)
+
+    print('\n'*5)
 
     '''
     command = f"ffmpeg -i {temp_wav_path} -ar 44100 {flac_file}"
