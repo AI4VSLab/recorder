@@ -42,6 +42,8 @@ def delete_flac_files_in_bucket(bucket_name):
 
 def convert_wav_to_flac(wav_file):
     flac_file = os.path.splitext(wav_file)[0] + ".flac"
+
+
     command = f"ffmpeg -i {wav_file} -ar 44100 {flac_file}"
     print(command)
     process = Popen(command.split(), stdout=PIPE, stderr=PIPE)
@@ -144,9 +146,10 @@ def main():
     
     '''
     arguments = sys.argv[1:]
-    print(sys.argv[1:])
     folder_path = arguments[0]
     bucket_name = arguments[1]
+    print(f'We have folder_path: {folder_path}, bucket_name:{bucket_name} ')
+
     output_file = str(folder_path) + "_output.csv"
 
     df_all = pd.DataFrame(columns=['File', 'Transcript'])
@@ -159,9 +162,14 @@ def main():
     # delete_flac_files_in_folder used for local storage, ie within the console instance or on a computer locally
     # delete_flac_files_in_folder(folder_path)
     for wav_file in wav_files:
+        print('\n'*5)
+        print('wav_file', wav_file)
+        print('\n'*5)
 
         if wav_file.name.endswith(".wav"):
             print(wav_file)
+            # gcloud takes flac files, need to convert from .wav to .flac using ffmepg. 
+            # but ffmepg needs to run on local files (or we can mount), this is the easiet way rn
             flac_file = convert_and_upload_files_in_folder(bucket_name, folder_path, wav_file.name)
             print(flac_file)
             gci_file_path = f"gs://{bucket_name}/{flac_file}"
