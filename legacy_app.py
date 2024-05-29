@@ -32,6 +32,7 @@ def image_page(image_id):
         exp.update_empty()
         image_url = url_for('static', filename='images/' + str(image_id) + '.png')
         return render_template('image_page.html', image_id=image_id, image_url=image_url)
+    
 
 @app.route('/controller', methods=['GET'])
 def controller():

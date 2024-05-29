@@ -196,7 +196,17 @@ def home():
         exp.update_empty()
         return render_template('home.html')
 
-
+@app.route('/image/pre<patient_id>', methods=['GET'])
+def all_images_page(patient_id):
+    shared_state.current_endpoint = f'/image/pre{patient_id}'
+    if not recording_state['is_recording']:  
+            start_recording(exp.cur_count)
+    exp.update_empty()
+    image_urls = []
+    for i in range(1, 6):
+        image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+        image_urls.append(image_url)
+    return render_template('pre_image_page.html', patient_id=patient_id, image_urls=image_urls)
 
 @app.route('/image/<patient_id>', methods=['GET', 'POST'])
 def image_page(patient_id):
