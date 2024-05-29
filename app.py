@@ -198,7 +198,7 @@ def home():
 
 @app.route('/image/pre<patient_id>', methods=['GET'])
 def all_images_page(patient_id):
-    shared_state.current_endpoint = f'/image/pre{patient_id}'
+    shared_state.current_endpoint = f'/image/{patient_id}'
     if not recording_state['is_recording']:  
             start_recording(exp.cur_count)
     exp.update_empty()
