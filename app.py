@@ -231,7 +231,7 @@ def image_page(patient_id):
         if not recording_state['is_recording']:  
             start_recording(exp.cur_count)
 
-        exp.update_empty()
+        #exp.update_empty()
         image_urls = []
         for i in range(1, 6):
             image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
@@ -253,7 +253,7 @@ def start_page():
 @app.route('/start_action', methods=['POST'])
 def start_action():
     # Put your start action code here
-    start_recording(exp.cur_count)
+    # start_recording(exp.cur_count)
     # Return a JSON response
     return jsonify(status="Action initiated successfully")
 
