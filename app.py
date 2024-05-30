@@ -194,6 +194,9 @@ def home():
         return "success"
     else:
         exp.update_empty()
+
+        print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
+
         return render_template('home.html')
 
 @app.route('/image/pre<patient_id>', methods=['GET'])
@@ -201,7 +204,11 @@ def all_images_page(patient_id):
     shared_state.current_endpoint = f'/image/{patient_id}'
     if not recording_state['is_recording']:  
             start_recording(exp.cur_count)
-    exp.update_empty()
+            print(exp.cur_count)
+
+    #exp.update_empty()
+    print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
+
     image_urls = []
     for i in range(1, 6):
         image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
@@ -220,6 +227,8 @@ def image_page(patient_id):
 
         if exp.cur_count < exp.tot_count: 
             start_recording(exp.cur_count)
+            print(exp.cur_count)
+
         else:
             print('We are done with the experiment :)')
         
@@ -230,8 +239,12 @@ def image_page(patient_id):
         # Start recording when this page is accessed
         if not recording_state['is_recording']:  
             start_recording(exp.cur_count)
+            print(exp.cur_count)
 
-        #exp.update_empty()
+
+        exp.update_empty()
+        print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
+
         image_urls = []
         for i in range(1, 6):
             image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
@@ -253,7 +266,8 @@ def start_page():
 @app.route('/start_action', methods=['POST'])
 def start_action():
     # Put your start action code here
-    # start_recording(exp.cur_count)
+    print(exp.cur_count)
+    start_recording(exp.cur_count)
     # Return a JSON response
     return jsonify(status="Action initiated successfully")
 
@@ -273,6 +287,8 @@ def start_experiment():
     exp.start(request.form['exp_name'], request.form['exp_count'])
     return "success"
 
+#@app.route('/tutorial', methods=['POST', 'GET'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5500, debug=True)
+
