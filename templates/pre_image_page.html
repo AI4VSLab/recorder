@@ -26,6 +26,24 @@
       width: 100%;
       height: auto;
     }
+    .button-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        .navigate-button {
+            border: 2px solid black;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .navigate-button:hover {
+            background-color: #45a049;
+        }
   </style>
 </head>
 <body>
@@ -33,6 +51,17 @@
   <div style="position: absolute; top: 0; left: 0; padding: 10px;">
     <span style="font-size: 2em;">AI4VS LAB</span>
   </div>
+  <div class="button-container">
+    <button class="navigate-button" onclick="navigate()">Next</button>
+    <script>
+      var patient_id = '{{ patient_id | safe }}';
+      
+      function navigate() {
+        window.location.href = 'http://localhost:5500/images/exp'+encodeURIComponent(patient_id)+'_'+1;
+      }
+  </script>
+
+</div>
   <!-- Main Container -->
   <div class="container">
     <!-- Image Grid -->

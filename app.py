@@ -199,21 +199,51 @@ def home():
 
         return render_template('home.html')
 
-@app.route('/image/pre<patient_id>', methods=['GET'])
+@app.route('/image/pre<patient_id>', methods=['GET', 'POST'])
 def all_images_page(patient_id):
     shared_state.current_endpoint = f'/image/{patient_id}'
-    if not recording_state['is_recording']:  
-            start_recording(exp.cur_count)
-            print(exp.cur_count)
+    if request.method == "GET":
+        if not recording_state['is_recording']:  
+                start_recording(exp.cur_count)
+                print(exp.cur_count)
 
-    #exp.update_empty()
-    print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
+        #exp.update_empty()
+        print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
 
+        image_urls = []
+        for i in range(1, 6):
+            image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+            image_urls.append(image_url)
+        return render_template('pre_image_page.html', patient_id=patient_id, image_urls=image_urls)
+    else: #post (button click)
+        pass
+
+@app.route('/images/exp<patient_id>_<j>', methods=['GET', 'POST'])
+def one_image_page(patient_id,j):
+    '''
     image_urls = []
+    for j in range(1, 6):
+        image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(j) + '.png')
+        image_urls.append(image_url)
+    print(image_urls)
+    print(i)
+    return render_template('image.html', patient_id = patient_id, image_urls = image_urls, i=int(i))
+    '''
+    shared_state.current_endpoint = f'/image/{patient_id}_{j}'
+    image_urls = []
+    print("server side "+ j)
     for i in range(1, 6):
         image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
         image_urls.append(image_url)
-    return render_template('pre_image_page.html', patient_id=patient_id, image_urls=image_urls)
+
+    if request.method == "GET":
+        #exp.update_empty()
+        print(patient_id)
+        print(j)
+        return render_template('image.html', patient_id=patient_id, image_urls=image_urls, j=(int(j)-1))
+    else: #post (button click)
+        pass
+
 
 @app.route('/image/<patient_id>', methods=['GET', 'POST'])
 def image_page(patient_id):
@@ -251,7 +281,7 @@ def image_page(patient_id):
             image_urls.append(image_url)
         return render_template('image_page.html', patient_id=patient_id, image_urls=image_urls)
     
-    
+
 
 @app.route('/controller', methods=['GET'])
 def controller():
@@ -290,5 +320,6 @@ def start_experiment():
 #@app.route('/tutorial', methods=['POST', 'GET'])
 
 if __name__ == '__main__':
+    print("hi")
     app.run(host='0.0.0.0', port=5500, debug=True)
 

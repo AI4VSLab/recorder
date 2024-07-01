@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Page</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-family: Helvetica;
+        }
+        .fullscreen-image {
+            width: 90%;
+            height: 90%;
+            object-fit: cover;
+        }
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .navigate-button {
+            border: 2px solid black;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .navigate-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ image_urls[j] }}" alt="Fullscreen Image" class="fullscreen-image">
+    <div class="button-container">
+        <button class="navigate-button" onclick="navigate()">Next</button>
+    </div>
+
+    <script>
+        var j = parseInt('{{ j | safe }}', 10);
+        var patient_id = '{{ patient_id | safe }}';
+        
+        console.log('j:', j);
+        j=j+2;
+        console.log('j:', j);
+        function navigate() {
+            if (j != 6) {
+                window.location.href = 'http://localhost:5500/images/exp'+encodeURIComponent(patient_id)+'_'+j;
+            } else {
+                window.location.href = 'http://localhost:5500/image/'+encodeURIComponent(patient_id);
+            }
+        }
+    </script>
+</body>
+</html>
