@@ -1,5 +1,20 @@
 # AI4VS App to collect data from the expert
 
+# EXPERIMENT PARAMETER ENTER BEFORE: CHOOSE WET NUMBER/NORMAL NUMBER, SELECTS IMAGE #N, #N+1, ...
+
+amd_number = 100
+normal_number = 99
+
+image_list = ['w' + str(i) for i in range(1, 6)] + ['w' + str(i) for i in range(amd_number, amd_number+5)] + \
+    ['n' + str(i) for i in range(1, 6)] + ['n' + str(i) for i in range(normal_number, normal_number+5)]
+
+print(image_list)
+k=0
+
+
+# choose wet number
+
+######
 import threading
 import pyaudio
 from flask import Flask, request, render_template, jsonify, url_for
@@ -212,13 +227,13 @@ def all_images_page(patient_id):
 
         image_urls = []
         for i in range(1, 6):
-            image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+            image_url = url_for('static', filename='amd/' + str(patient_id) + '_' + str(i) + '.png')
             image_urls.append(image_url)
         return render_template('pre_image_page.html', patient_id=patient_id, image_urls=image_urls)
     else: #post (button click)
         pass
 
-@app.route('/images/exp<patient_id>_<j>', methods=['GET', 'POST'])
+@app.route('/image/exp<patient_id>_<j>', methods=['GET', 'POST'])
 def one_image_page(patient_id,j):
     '''
     image_urls = []
@@ -233,14 +248,14 @@ def one_image_page(patient_id,j):
     image_urls = []
     print("server side "+ j)
     for i in range(1, 6):
-        image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+        image_url = url_for('static', filename='amd/' + str(patient_id) + '_' + str(i) + '.png')
         image_urls.append(image_url)
 
     if request.method == "GET":
         #exp.update_empty()
         print(patient_id)
         print(j)
-        return render_template('image.html', patient_id=patient_id, image_urls=image_urls, j=(int(j)-1))
+        return render_template('image.html', patient_id=patient_id, image_urls=image_urls, j=(int(j)-1), )
     else: #post (button click)
         pass
 
@@ -248,6 +263,13 @@ def one_image_page(patient_id,j):
 @app.route('/image/<patient_id>', methods=['GET', 'POST'])
 def image_page(patient_id):
     shared_state.current_endpoint = f'/image/{patient_id}'
+    if (patient_id == 'tutorial'):
+        next_patient_id = 'start'
+    elif (image_list.index(patient_id)+1 == 20):
+        next_patient_id = ''
+    else:
+        next_patient_id = image_list[image_list.index(patient_id)+1]
+
     if request.method == 'POST':
         print('submit clicked!')
         
@@ -277,9 +299,9 @@ def image_page(patient_id):
 
         image_urls = []
         for i in range(1, 6):
-            image_url = url_for('static', filename='images/' + str(patient_id) + '_' + str(i) + '.png')
+            image_url = url_for('static', filename='amd/' + str(patient_id) + '_' + str(i) + '.png')
             image_urls.append(image_url)
-        return render_template('image_page.html', patient_id=patient_id, image_urls=image_urls)
+        return render_template('image_page.html', patient_id=patient_id, image_urls=image_urls, next_patient_id= next_patient_id)
     
 
 

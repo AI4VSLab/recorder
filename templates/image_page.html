@@ -194,6 +194,7 @@
 			$('.submit-btn').click(function () {
 				var sliderVal = $('.slider').val();
 				var textVal = $('.textbox').val();
+				var next_patient_id = '{{ next_patient_id |safe }}'
 				$(this).prop('disabled', true);
 				$.ajax({
 					type: 'POST',
@@ -201,6 +202,7 @@
 					data: { 'slider': sliderVal, 'text': textVal },
 					success: function (response) {
 						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
+						if (next_patient_id != '' && next_patient_id!='start'){window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);}
 					},
 					error: function () {
 						$('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');
@@ -209,6 +211,7 @@
 						$('.submit-btn').prop('disabled', true);
 					}
 				});
+				//setTimeout(function() {window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);}, 1000);
 			});
 		});
 	</script>
