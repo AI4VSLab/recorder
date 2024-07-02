@@ -1,17 +1,17 @@
 # AI4VS App to collect data from the expert
 
 # EXPERIMENT PARAMETER ENTER BEFORE: CHOOSE WET NUMBER/NORMAL NUMBER, SELECTS IMAGE #N, #N+1, ...
-
+import random
 amd_number = 100
-normal_number = 99
+normal_number = 80
 
-image_list = ['w' + str(i) for i in range(1, 6)] + ['w' + str(i) for i in range(amd_number, amd_number+5)] + \
-    ['n' + str(i) for i in range(1, 6)] + ['n' + str(i) for i in range(normal_number, normal_number+5)]
+image_list = ['w3','w5','w7','w2'] + ['w' + str(i) for i in range(amd_number, amd_number+5)] + \
+    ['n1','n2','n3','n5','n6'] + ['n' + str(i) for i in range(normal_number, normal_number+5)]
 
-print(image_list)
 k=0
-
-
+random.shuffle(image_list)
+image_list.insert(0, 'w1')
+print(image_list)
 # choose wet number
 
 ######
@@ -32,7 +32,8 @@ class SharedState:
     def __init__(self):
         self.current_endpoint = '/'
 
-
+def get_image_list():
+    return image_list
 
 
 # Create an instance of the shared state

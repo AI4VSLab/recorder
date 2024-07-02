@@ -179,8 +179,9 @@
 		$(document).ready(function () {
 			var lastSlashIndex = window.location.pathname.lastIndexOf('/');
 			var patient_id = window.location.pathname.substring(lastSlashIndex + 1);
-			console.log(patient_id);
-
+			console.log(patient_id + "hi");
+			var next_patient_id = '{{ next_patient_id |safe }}'
+			console.log(next_patient_id + "hi");
 			// var pathArray = window.location.pathname.split('/');
 			// var imageIdIndex = pathArray.indexOf('image') + 1;
 			// var imageId = pathArray.length > imageIdIndex ? pathArray[imageIdIndex] : null;
@@ -194,7 +195,8 @@
 			$('.submit-btn').click(function () {
 				var sliderVal = $('.slider').val();
 				var textVal = $('.textbox').val();
-				var next_patient_id = '{{ next_patient_id |safe }}'
+				
+				console.log(next_patient_id + "hi ");
 				$(this).prop('disabled', true);
 				$.ajax({
 					type: 'POST',
@@ -203,6 +205,7 @@
 					success: function (response) {
 						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
 						if (next_patient_id != '' && next_patient_id!='start'){window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);}
+						if (next_patient_id === 'start'){window.location.href = 'http://localhost:5500/start_exp';}
 					},
 					error: function () {
 						$('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');

@@ -6,11 +6,10 @@
 
 import pandas as pd
 from datetime import datetime
-
 class Experiment:
 
     ACTIVE = False
-
+    
     def __init__(self, tot_count = 20) -> None:
         self.tot_count = tot_count
         self.cur_count = 0
