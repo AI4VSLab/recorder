@@ -288,7 +288,7 @@ def image_page(patient_id):
         exp.update_last_row(request.form['text'], request.form['slider'])
         return "success"
     else:
-
+        
         # Start recording when this page is accessed
         if not recording_state['is_recording']:  
             start_recording(exp.cur_count)
