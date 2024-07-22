@@ -200,7 +200,10 @@ def start_recording(image_id):
 def stop_recording():
     recording_state['is_recording'] = False
     recording_state['thread'].join()  # Wait for the thread to finish
-
+    
+@app.route('/fullscreen_request', methods=['GET'])
+def fullscreen_request():
+    return render_template('fullscreen_request.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():

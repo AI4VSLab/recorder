@@ -179,9 +179,7 @@
 		$(document).ready(function () {
 			var lastSlashIndex = window.location.pathname.lastIndexOf('/');
 			var patient_id = window.location.pathname.substring(lastSlashIndex + 1);
-			console.log(patient_id + "hi");
 			var next_patient_id = '{{ next_patient_id |safe }}'
-			console.log(next_patient_id + "hi");
 			// var pathArray = window.location.pathname.split('/');
 			// var imageIdIndex = pathArray.indexOf('image') + 1;
 			// var imageId = pathArray.length > imageIdIndex ? pathArray[imageIdIndex] : null;
