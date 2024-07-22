@@ -39,25 +39,25 @@
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().then(() => {
-                    window.location.href = 'main.html'; // Redirect to the main content page
+                    window.location.href = 'http://127.0.0.1:5500/image/pretutorial'; // Redirect to the desired page
                 }).catch(err => {
                     alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
                 });
             } else if (elem.mozRequestFullScreen) { // Firefox
                 elem.mozRequestFullScreen().then(() => {
-                    window.location.href = 'main.html'; // Redirect to the main content page
+                    window.location.href = 'http://127.0.0.1:5500/image/pretutorial'; // Redirect to the desired page
                 }).catch(err => {
                     alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
                 });
             } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
                 elem.webkitRequestFullscreen().then(() => {
-                    window.location.href = 'main.html'; // Redirect to the main content page
+                    window.location.href = 'http://127.0.0.1:5500/image/pretutorial'; // Redirect to the desired page
                 }).catch(err => {
                     alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
                 });
             } else if (elem.msRequestFullscreen) { // IE/Edge
                 elem.msRequestFullscreen().then(() => {
-                    window.location.href = 'main.html'; // Redirect to the main content page
+                    window.location.href = 'http://127.0.0.1:5500/image/pretutorial'; // Redirect to the desired page
                 }).catch(err => {
                     alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
                 });
