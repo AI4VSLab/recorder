@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fullscreen Wrapper</title>
+    <style>
+        
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: white;
+            font-family: Helvetica;
+            font-size: 24px;
+        }
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+        .button {
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button class="button" onclick="requestFullScreen()">Go Fullscreen</button>
+    </div>
+    <iframe id="contentFrame" src="about:blank" style="display: none;"></iframe>
+
+    <script>
+        function requestFullScreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    loadContent('http://localhost:5500/image/pretutorial'); // Initial content
+                    document.querySelector('.button-container').style.display = 'none';
+                    document.getElementById('contentFrame').style.display = 'block';
+                }).catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen().then(() => {
+                    loadContent('http://localhost:5500/image/pretutorial'); // Initial content
+                    document.querySelector('.button-container').style.display = 'none';
+                    document.getElementById('contentFrame').style.display = 'block';
+                }).catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                elem.webkitRequestFullscreen().then(() => {
+                    loadContent('http://localhost:5500/image/pretutorial'); // Initial content
+                    document.querySelector('.button-container').style.display = 'none';
+                    document.getElementById('contentFrame').style.display = 'block';
+                }).catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen().then(() => {
+                    loadContent('http://localhost:5500/image/pretutorial'); // Initial content
+                    document.querySelector('.button-container').style.display = 'none';
+                    document.getElementById('contentFrame').style.display = 'block';
+                }).catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            }
+        }
+
+        function loadContent(url) {
+            document.getElementById('contentFrame').src = url;
+        }
+    </script>
+</body>
+</html>

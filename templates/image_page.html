@@ -1,221 +1,226 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-	<title>Image Page</title>
-	<script src="../static/jquery.min.js"></script>
-	<style>
-		.container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100vh;
-			font-family: Helvetica;
-		}
-
-		.slid_org {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.slider {
-			width: 45vw;
-		}
-
-		.slider_info {
-			display: flex;
-			width: 100px;
-			flex-direction: column;
-		}
-
-		.textbox {
-			width: 50%;
-			height: 100px;
-			margin-top: 20px;
-			font-size: 20px;
-			text-align: center;
-			border: 2px solid black;
-			border-radius: 10px;
-			padding: 10px;
-			resize: none;
-		}
-
-		.submit-btn {
-			border: 2px solid black;
-			margin-top: 20px;
-			font-size: 20px;
-			padding: 10px 20px;
-			border-radius: 10px;
-			background-color: #4CAF50;
-			color: white;
-			cursor: pointer;
-		}
-
-		.submit-btn.disabled {
-			border: 2px solid black;
-			background-color: white;
-			cursor: not-allowed;
-		}
-
-		.success-btn {
-			border: 2px solid black;
-			background-color: white;
-			color: green;
-			cursor: not-allowed;
-		}
-
-		.error-btn {
-			border: 2px solid black;
-			background-color: white;
-			color: red;
-			cursor: not-allowed;
-		}
-
-		.zeiss-img {
-			width: 700px;
-		}
-
-		.grid-container {
-			display: grid;
-			grid-template-columns: repeat(5, 1fr);
-			gap: 10px;
-		}
-
-		.grid-item {
-			width: 100%;
-			height: auto;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>Image Page</title>
+    <script src="../static/jquery.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: white;
+            font-family: Helvetica;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Helvetica;
+        }
+        .slid_org {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider {
+            width: 45vw;
+        }
+        .slider_info {
+            display: flex;
+            width: 100px;
+            flex-direction: column;
+        }
+        .textbox {
+            width: 50%;
+            height: 100px;
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 10px;
+            resize: none;
+        }
+        .submit-btn {
+            border: 2px solid black;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .submit-btn.disabled {
+            border: 2px solid black;
+            background-color: white;
+            cursor: not-allowed;
+        }
+        .success-btn {
+            border: 2px solid black;
+            background-color: white;
+            color: green;
+            cursor: not-allowed;
+        }
+        .error-btn {
+            border: 2px solid black;
+            background-color: white;
+            color: red;
+            cursor: not-allowed;
+        }
+        .zeiss-img {
+            width: 700px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .grid-item {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- This div is at the top left like a logo: -->
-	<div style="position: absolute; top: 0; left: 0; padding: 10px;">
-		<span style="font-size: 2em;">AI4VS LAB</h1>
-	</div>
-	<div class="container">
-		<h3>Please provide a rating:</h3>
-		<div class="grid-container">
-			<img class="grid-item" src="{{ image_urls[0] }}" alt="Patient image 1">
-			<img class="grid-item" src="{{ image_urls[1] }}" alt="Patient image 2">
-			<img class="grid-item" src="{{ image_urls[2] }}" alt="Patient image 3">
-			<img class="grid-item" src="{{ image_urls[3] }}" alt="Patient image 4">
-			<img class="grid-item" src="{{ image_urls[4] }}" alt="Patient image 5">
-		</div>
-		<br><br>
-		<!-- Guidelines -->
-		<table
-			style="font-family: monospace; background-color: rgba(211, 211, 211, 0.5); border-radius: 10px; padding: 10px;">
-			<tr>
-				<td style="text-align: right; font-weight: bold;">Guidelines</td>
-				<td style="text-align: left;"></td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">0-5:</td>
-				<td style="text-align: left;">Definitely Healthy</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">6-39:</td>
-				<td style="text-align: left;">Probably Healthy</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">40-49:</td>
-				<td style="text-align: left;">Healthy, If Forced</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">50:</td>
-				<td style="text-align: left;">Unrated</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">51-60:</td>
-				<td style="text-align: left;">Wet, If Forced</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">61-94:</td>
-				<td style="text-align: left;">Probably Wet</td>
-			</tr>
-			<tr>
-				<td style="text-align: right;">95-100:</td>
-				<td style="text-align: left;">Definitely Wet</td>
-			</tr>
-		</table>
+    <!-- This div is at the top left like a logo: -->
+    <div style="position: absolute; top: 0; left: 0; padding: 10px;">
+        <span style="font-size: 2em;">AI4VS LAB</span>
+    </div>
+    <div class="container">
+        <h3>Please provide a rating:</h3>
+        <div class="grid-container">
+            <img class="grid-item" src="{{ image_urls[0] }}" alt="Patient image 1">
+            <img class="grid-item" src="{{ image_urls[1] }}" alt="Patient image 2">
+            <img class="grid-item" src="{{ image_urls[2] }}" alt="Patient image 3">
+            <img class="grid-item" src="{{ image_urls[3] }}" alt="Patient image 4">
+            <img class="grid-item" src="{{ image_urls[4] }}" alt="Patient image 5">
+        </div>
+        <br><br>
+        <!-- Guidelines -->
+        <table style="font-family: monospace; background-color: rgba(211, 211, 211, 0.5); border-radius: 10px; padding: 10px;">
+            <tr>
+                <td style="text-align: right; font-weight: bold;">Guidelines</td>
+                <td style="text-align: left;"></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">0-5:</td>
+                <td style="text-align: left;">Definitely Healthy</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">6-39:</td>
+                <td style="text-align: left;">Probably Healthy</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">40-49:</td>
+                <td style="text-align: left;">Healthy, If Forced</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">50:</td>
+                <td style="text-align: left;">Unrated</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">51-60:</td>
+                <td style="text-align: left;">Wet, If Forced</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">61-94:</td>
+                <td style="text-align: left;">Probably Wet</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;">95-100:</td>
+                <td style="text-align: left;">Definitely Wet</td>
+            </tr>
+        </table>
+        <br><br>
+        <div class="slid_org">
+            <div class="slider_info" style="align-items: end;">
+                <div>HEALTHY</div>
+                <div><b>(0)</b></div>
+            </div>
+            <input class="slider" type="range" value="50" min="0" max="100" oninput="document.getElementById('slider-value').value = this.value">
+            <div class="slider_info" style="align-items: start;">
+                <div>WET</div>
+                <div><b>(100)</b></div>
+            </div>
+        </div>
+        <span>Score: <output id="slider-value">50</output></span>
+        <br>
+        <textarea class="textbox"></textarea>
+        <button class="submit-btn">Submit</button>
+        <br><br>
+        <span>Progress: <span id="curr_count"></span> / <span id="total"></span></span>
+    </div>
 
-		<br>
-		<br>
-		<div class="slid_org">
-			<div class="slider_info" style="align-items: end;">
-				<div>
-					HEALTHY
-				</div>
-				<div>
-					<b>(0)</b>
-				</div>
-			</div>
-			<input class="slider" type="range" value="50" min="0" max="100"
-				oninput="document.getElementById('slider-value').value = this.value">
-			<div class="slider_info" style="align-items: start;">
-				<div>
-					WET
-				</div>
-				<div>
-					<b>(100)</b>
-				</div>
-			</div>
-		</div>
-		<span>Score: <output id="slider-value">50</output></span>
-		<br>
-		<textarea class="textbox"></textarea>
-		<button class="submit-btn">Submit</button>
+    <script>
+        $(document).ready(function () {
+            var lastSlashIndex = window.location.pathname.lastIndexOf('/');
+            var patient_id = window.location.pathname.substring(lastSlashIndex + 1);
+            var next_patient_id = '{{ next_patient_id | safe }}';
 
-		<br>
-		<br>
-		<span>Progress: <span id="curr_count"></span> / <span id="total"></span></span>
-	</div>
+            $.get('/get_status', function (data) {
+                $('#curr_count').text(data.current);
+                $('#total').text(data.total);
+            });
 
-	<script>
-		$(document).ready(function () {
-			var lastSlashIndex = window.location.pathname.lastIndexOf('/');
-			var patient_id = window.location.pathname.substring(lastSlashIndex + 1);
-			var next_patient_id = '{{ next_patient_id |safe }}'
-			// var pathArray = window.location.pathname.split('/');
-			// var imageIdIndex = pathArray.indexOf('image') + 1;
-			// var imageId = pathArray.length > imageIdIndex ? pathArray[imageIdIndex] : null;
-			// console.log(imageId);
+            $('.submit-btn').click(function () {
+                var sliderVal = $('.slider').val();
+                var textVal = $('.textbox').val();
+                
+                $(this).prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: '/image/' + patient_id,
+                    data: { 'slider': sliderVal, 'text': textVal },
+                    success: function (response) {
+                        $('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
+                        if (next_patient_id != '' && next_patient_id != 'start') {
+                            window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);
+                        }
+                        if (next_patient_id === 'start') {
+                            window.location.href = 'http://localhost:5500/start_exp';
+                        }
+                    },
+                    error: function () {
+                        $('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');
+                    },
+                    complete: function () {
+                        $('.submit-btn').prop('disabled', true);
+                    }
+                });
+            });
+        });
 
-			$.get('/get_status', function (data) {
-				$('#curr_count').text(data.current);
-				$('#total').text(data.total);
-			});
+        function requestFullScreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                elem.webkitRequestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            }
+        }
 
-			$('.submit-btn').click(function () {
-				var sliderVal = $('.slider').val();
-				var textVal = $('.textbox').val();
-				
-				console.log(next_patient_id + "hi ");
-				$(this).prop('disabled', true);
-				$.ajax({
-					type: 'POST',
-					url: '/image/' + patient_id,
-					data: { 'slider': sliderVal, 'text': textVal },
-					success: function (response) {
-						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
-						if (next_patient_id != '' && next_patient_id!='start'){window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);}
-						if (next_patient_id === 'start'){window.location.href = 'http://localhost:5500/start_exp';}
-					},
-					error: function () {
-						$('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');
-					},
-					complete: function () {
-						$('.submit-btn').prop('disabled', true);
-					}
-				});
-				//setTimeout(function() {window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);}, 1000);
-			});
-		});
-	</script>
+        // Check if the document is in fullscreen mode and request it if not
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                requestFullScreen();
+            }
+        });
+    </script>
 </body>
-
 </html>

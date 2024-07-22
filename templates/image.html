@@ -12,6 +12,7 @@
             align-items: center;
             position: relative;
             font-family: Helvetica;
+            background-color: white;
         }
         .fullscreen-image {
             width: 100vw;
@@ -37,48 +38,67 @@
             background-color: #45a049;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <img src="{{ image_urls[j] }}" alt="Fullscreen Image" class="fullscreen-image" id="fullscreenImage">
     <div class="button-container">
-        <button class="navigate-button" onclick="navigate()">Next</button>
+        <button class="navigate-button" onclick="goBack()">Back</button>
     </div>
 
     <script>
-        function navigate() {
-            var j = parseInt('{{ j | safe }}', 10);
-            var patient_id = '{{ patient_id | safe }}';
-        
-            console.log('j:', j);
-            j += 2;
-            console.log('j:', j);
+        var patient_id = '{{ patient_id | safe }}';
+        var image_number = '{{ j | safe }}';
+        var pageLoadTime = new Date().toISOString();
 
-            if (j != 6) {
-                window.location.href = 'http://localhost:5500/image/exp' + encodeURIComponent(patient_id) + '_' + j;
-            } else {
-                window.location.href = 'http://localhost:5500/image/' + encodeURIComponent(patient_id);
-            }
-        }
+        function goBack() {
+            var backButtonClickTime = new Date().toISOString();
+            var data = {
+                patient_id: patient_id,
+                image_number: image_number,
+                page_load_time: pageLoadTime,
+                back_button_click_time: backButtonClickTime
+            };
 
-        function toggleFullScreen() {
-            const elem = document.documentElement;
-            if (!document.fullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.mozRequestFullScreen) { // Firefox
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { // IE/Edge
-                    elem.msRequestFullscreen();
+            // Send data to the server
+            $.ajax({
+                url: '/log_time',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    // Navigate to the previous page after successful logging
+                    window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(patient_id);
+                },
+                error: function(error) {
+                    console.error('Error logging time data:', error);
+                    // Navigate to the previous page even if logging fails
+                    window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(patient_id);
                 }
-            } else {
-                document.exitFullscreen();
-            }
+            });
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
-            toggleFullScreen();
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    elem.webkitRequestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                }
+            }
         });
     </script>
 </body>

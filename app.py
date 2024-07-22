@@ -24,9 +24,20 @@ import audioop
 import os
 import subprocess
 import numpy as np
+import datetime
+import csv 
 
 app = Flask(__name__)
 exp = Experiment()
+
+CSV_DIR = "saves/timelogs"
+
+# Ensure the directory exists
+if not os.path.exists(CSV_DIR):
+    os.makedirs(CSV_DIR)
+
+current_experiment_name = ""
+current_experiment_id = ""
 
 class SharedState:
     def __init__(self):
@@ -203,7 +214,7 @@ def stop_recording():
     
 @app.route('/fullscreen_request', methods=['GET'])
 def fullscreen_request():
-    return render_template('fullscreen_request.html')
+    return render_template('fullscreen_wrapper.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -307,6 +318,30 @@ def image_page(patient_id):
             image_urls.append(image_url)
         return render_template('image_page.html', patient_id=patient_id, image_urls=image_urls, next_patient_id= next_patient_id)
     
+@app.route('/log_time', methods=['POST'])
+def log_time():
+    global current_experiment_name, current_experiment_id
+    data = request.json
+    patient_id = data.get('patient_id')
+    image_number = data.get('image_number')
+    page_load_time = data.get('page_load_time')
+    back_button_click_time = data.get('back_button_click_time')
+
+    csv_file_path = os.path.join(CSV_DIR, f'{current_experiment_name}_times.csv')
+
+    # Append the log entry to the CSV file
+    with open(csv_file_path, 'a', newline='') as csvfile:
+        fieldnames = ['patient_id', 'image_number', 'page_load_time', 'back_button_click_time']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writerow({
+            'patient_id': patient_id,
+            'image_number': int(image_number) + 1,
+            'page_load_time': page_load_time,
+            'back_button_click_time': back_button_click_time
+        })
+
+    return jsonify({"status": "success"}), 200
+    
 
 
 @app.route('/controller', methods=['GET'])
@@ -340,6 +375,20 @@ def stop_experiment():
 
 @app.route('/start', methods=['POST'])
 def start_experiment():
+    global current_experiment_name, current_experiment_id
+    experiment_name = request.form['exp_name']
+    total_samples = request.form['exp_count']
+    current_experiment_name = experiment_name
+    current_experiment_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    csv_file_path = os.path.join(CSV_DIR, f'{current_experiment_name}_times.csv')
+
+    # Create the CSV file and write headers if it doesn't exist
+    if not os.path.exists(csv_file_path):
+        with open(csv_file_path, 'w', newline='') as csvfile:
+            fieldnames = ['patient_id', 'image_number', 'page_load_time', 'back_button_click_time']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            
     exp.start(request.form['exp_name'], request.form['exp_count'])
     return "success"
 
