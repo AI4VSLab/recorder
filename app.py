@@ -2,15 +2,44 @@
 
 # EXPERIMENT PARAMETER ENTER BEFORE: CHOOSE WET NUMBER/NORMAL NUMBER, SELECTS IMAGE #N, #N+1, ...
 import random
-amd_number = 100
-normal_number = 80
+import shutil
+import os
+control_list = ['w3','w5','w7','w2','w1','n1','n2','n3','n5','n6','w6','w7','w8','w9','w10','n7','n8','n9','n10','n11'] 
 
-image_list = ['w3','w5','w7','w2'] + ['w' + str(i) for i in range(amd_number, amd_number+5)] + \
-    ['n1','n2','n3','n5','n6'] + ['n' + str(i) for i in range(normal_number, normal_number+5)]
+all_files = os.listdir('static/amd')
+
+# Extract unique identifiers from the filenames
+unique_identifiers = set()
+for file in all_files:
+    if file.endswith('.png'):  # assuming the images are .png files
+        identifier = file.split('_')[0]
+        unique_identifiers.add(identifier)
+
+# Separate identifiers into 'w' and 'n'
+w_identifiers = [item for item in unique_identifiers if item.startswith('w') and item not in control_list]
+n_identifiers = [item for item in unique_identifiers if item.startswith('n') and item not in control_list]
+
+# Ensure there are enough items to select from
+if len(w_identifiers) < 10 or len(n_identifiers) < 10:
+    raise ValueError("Not enough identifiers to select from. Please check the folder and control list.")
+
+# Randomly select 10 experimental items from each category
+experimental_w = random.sample(w_identifiers, 10)
+experimental_n = random.sample(n_identifiers, 10)
+
+# Combine the two lists
+experimental_list = experimental_w + experimental_n
+image_list = experimental_list + control_list
 
 k=0
 random.shuffle(image_list)
-image_list.insert(0, 'w1')
+
+global current_experiment_name 
+global current_experiment_id 
+
+current_experiment_name = " "
+current_experiment_id = " "
+
 print(image_list)
 # choose wet number
 
@@ -370,12 +399,53 @@ def get_experiment_status():
 
 @app.route('/stop', methods=['POST'])
 def stop_experiment():
+    global experiment_name
+    # Check if the experiment name starts with "dr"
+    if experiment_name.startswith('dr'):
+        # Get the list of all files in the directory
+        all_files = os.listdir("static/amd")
+        
+        # Extract unique identifiers from the filenames
+        unique_identifiers = set()
+        for file in all_files:
+            if file.endswith('.png'):  # assuming the images are .png files
+                identifier = file.split('_')[0]
+                unique_identifiers.add(identifier)
+        
+        # Separate identifiers into 'w' and 'n'
+        w_identifiers = [item for item in unique_identifiers if item.startswith('w') and item not in control_list]
+        n_identifiers = [item for item in unique_identifiers if item.startswith('n') and item not in control_list]
+        
+        # Ensure there are enough items to select from
+        if len(w_identifiers) < 10 or len(n_identifiers) < 10:
+            return "Not enough identifiers to select from. Please check the folder and control list.", 400
+        
+        # Randomly select 10 experimental items from each category
+        experimental_w = random.sample(w_identifiers, 10)
+        experimental_n = random.sample(n_identifiers, 10)
+        
+        # Combine the two lists
+        experimental_list = experimental_w + experimental_n
+        
+        # Generate the image list with suffixes and move images
+        image_list = []
+        for identifier in experimental_list:
+            for i in range(1, 6):  # Assuming each identifier has 5 images
+                image_name = f"{identifier}_{i}.png"
+                image_list.append(image_name)
+                
+                # Move the image to the used directory
+                src_path = os.path.join("static/amd", image_name)
+                dest_path = os.path.join("static/used", image_name)
+                shutil.move(src_path, dest_path)
+        
+        print("Experimental List:", experimental_list)
+        print("Image List:", image_list)
     exp.end()
     return "success"
 
 @app.route('/start', methods=['POST'])
 def start_experiment():
-    global current_experiment_name, current_experiment_id
     experiment_name = request.form['exp_name']
     total_samples = request.form['exp_count']
     current_experiment_name = experiment_name
