@@ -176,7 +176,8 @@
                     url: '/image/' + patient_id,
                     data: { 'slider': sliderVal, 'text': textVal },
                     success: function (response) {
-                        $('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
+                        $('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please wait for the next image to load');
+                        console.log(next_patient_id);
                         if (next_patient_id != '' && next_patient_id != 'start') {
                             window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(next_patient_id);
                         }

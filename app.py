@@ -4,7 +4,7 @@
 import random
 import shutil
 import os
-control_list = ['w3','w5','w7','w2','w1','n1','n2','n3','n5','n6','w6','w7','w8','w9','w10','n7','n8','n9','n10','n11'] 
+control_list = ['w3','w5','w7','w2','w1','n1','n2','n3','n5','n6','w6','w11','w8','w9','w10','n7','n8','n9','n10','n11'] 
 
 all_files = os.listdir('static/amd')
 
@@ -30,6 +30,7 @@ experimental_n = random.sample(n_identifiers, 10)
 # Combine the two lists
 experimental_list = experimental_w + experimental_n
 image_list = experimental_list + control_list
+print(f' len image list {len(image_list)}')
 
 k=0
 random.shuffle(image_list)
@@ -119,12 +120,21 @@ def record_audio_legacy(image_id,exp_id):
     print(f"Recording audio for the {shared_state.current_endpoint} endpoint...")
     frames = []
     while recording_state['is_recording']:
-        # Your audio recording logic here
-        data = stream.read(CHUNK)
-        data = adjust_volume(data, 2)
-        frames.append(data)
+        try:
+            data = stream.read(CHUNK)
+        except OSError as e:
+            if e.errno == -9981: 
+                print("Input overflowed. Retrying...")
+                data = None
+                continue  
+        if data:
+            data = adjust_volume(data, 2)
+            frames.append(data)
+        else: 
+            data = b'\x00' * CHUNK
+            frames.append(data)
         # Check the audio level
-        audio_level = audioop.rms(data, 2)  # Get the RMS of the chunk
+        # audio_level = audioop.rms(data, 2)  # Get the RMS of the chunk
 
     print(f"Recording stopped for {image_id}.")
     # Stop and close the stream
@@ -309,7 +319,7 @@ def image_page(patient_id):
     shared_state.current_endpoint = f'/image/{patient_id}'
     if (patient_id == 'tutorial'):
         next_patient_id = 'start'
-    elif (image_list.index(patient_id)+1 == 20):
+    elif (image_list.index(patient_id)+1 == exp.tot_count):
         next_patient_id = ''
     else:
         next_patient_id = image_list[image_list.index(patient_id)+1]
@@ -320,15 +330,15 @@ def image_page(patient_id):
         # Stop recording when this page is accessed
         if recording_state['is_recording']:
             stop_recording()
-
+        print(f' exp curr count {exp.cur_count} out {exp.tot_count}')
         if exp.cur_count < exp.tot_count: 
             start_recording(exp.cur_count)
             print(exp.cur_count)
 
         else:
             print('We are done with the experiment :)')
-        
-        exp.update_last_row(request.form['text'], request.form['slider'])
+        if (patient_id != 'tutorial'):
+            exp.update_last_row(request.form['text'], request.form['slider'])
         return "success"
     else:
         
@@ -337,8 +347,8 @@ def image_page(patient_id):
             start_recording(exp.cur_count)
             print(exp.cur_count)
 
-
-        exp.update_empty()
+        if (patient_id != 'tutorial'):
+            exp.update_empty()
         print("curr count from"+str(exp.cur_count-1)+"to"+ str(exp.cur_count))
 
         image_urls = []
@@ -380,7 +390,7 @@ def controller():
 @app.route('/start_exp')
 def start_page():
     shared_state.current_endpoint = f'start_exp'
-    return render_template('start.html')
+    return render_template('start.html', patient_id = image_list[0])
 
 
 @app.route('/start_action', methods=['POST'])

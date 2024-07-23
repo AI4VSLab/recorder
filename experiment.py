@@ -10,7 +10,7 @@ class Experiment:
 
     ACTIVE = False
     
-    def __init__(self, tot_count = 20) -> None:
+    def __init__(self, tot_count = 40) -> None:
         self.tot_count = tot_count
         self.cur_count = 0
         self.exp_name = "debug"
@@ -56,7 +56,7 @@ class Experiment:
     def get_time(self):
         return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    def start(self, exp_name = "demo", total = 20):
+    def start(self, exp_name = "demo", total = 40):
         self.ACTIVE = True
         self.cur_count = 0
         self.tot_count = int(total)

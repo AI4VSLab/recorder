@@ -157,7 +157,7 @@
 					url: '/',
 					data: {'slider': sliderVal, 'text': textVal},
 					success: function(response) {
-						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please press F10 to continue');
+						$('.submit-btn').removeClass('error-btn').addClass('success-btn').text('Success ✅: please wait for the next image to load');
 					},
 					error: function() {
 						$('.submit-btn').removeClass('success-btn').addClass('error-btn').text('Error ❌: please check if the server is halted');
