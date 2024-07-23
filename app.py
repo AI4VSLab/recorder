@@ -399,9 +399,9 @@ def get_experiment_status():
 
 @app.route('/stop', methods=['POST'])
 def stop_experiment():
-    global experiment_name
+    global current_experiment_name
     # Check if the experiment name starts with "dr"
-    if experiment_name.startswith('dr'):
+    if current_experiment_name.startswith('dr'):
         # Get the list of all files in the directory
         all_files = os.listdir("static/amd")
         
