@@ -364,19 +364,19 @@ def log_time():
     patient_id = data.get('patient_id')
     image_number = data.get('image_number')
     page_load_time = data.get('page_load_time')
-    back_button_click_time = data.get('back_button_click_time')
+    next_button_click_time = data.get('next_button_click_time')
 
     csv_file_path = os.path.join(CSV_DIR, f'{current_experiment_name}_times.csv')
 
     # Append the log entry to the CSV file
     with open(csv_file_path, 'a', newline='') as csvfile:
-        fieldnames = ['patient_id', 'image_number', 'page_load_time', 'back_button_click_time']
+        fieldnames = ['patient_id', 'image_number', 'page_load_time', 'next_button_click_time']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writerow({
             'patient_id': patient_id,
             'image_number': int(image_number) + 1,
             'page_load_time': page_load_time,
-            'back_button_click_time': back_button_click_time
+            'next_button_click_time': next_button_click_time
         })
 
     return jsonify({"status": "success"}), 200
@@ -465,7 +465,7 @@ def start_experiment():
     # Create the CSV file and write headers if it doesn't exist
     if not os.path.exists(csv_file_path):
         with open(csv_file_path, 'w', newline='') as csvfile:
-            fieldnames = ['patient_id', 'image_number', 'page_load_time', 'back_button_click_time']
+            fieldnames = ['patient_id', 'image_number', 'page_load_time', 'next_button_click_time']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             

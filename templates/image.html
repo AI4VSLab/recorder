@@ -43,7 +43,7 @@
 <body>
     <img src="{{ image_urls[j] }}" alt="Fullscreen Image" class="fullscreen-image" id="fullscreenImage">
     <div class="button-container">
-        <button class="navigate-button" onclick="goBack()">Back</button>
+        <button class="navigate-button" onclick="goNext()">Next</button>
     </div>
 
     <script>
@@ -51,13 +51,13 @@
         var image_number = '{{ j | safe }}';
         var pageLoadTime = new Date().toISOString();
 
-        function goBack() {
-            var backButtonClickTime = new Date().toISOString();
+        function goNext() {
+            var nextButtonClickTime = new Date().toISOString();
             var data = {
                 patient_id: patient_id,
                 image_number: image_number,
                 page_load_time: pageLoadTime,
-                back_button_click_time: backButtonClickTime
+                next_button_click_time: nextButtonClickTime
             };
 
             // Send data to the server
@@ -68,12 +68,12 @@
                 data: JSON.stringify(data),
                 success: function(response) {
                     // Navigate to the previous page after successful logging
-                    window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(patient_id);
+                    window.location.href = 'http://localhost:5500/image/' + encodeURIComponent(patient_id);
                 },
                 error: function(error) {
                     console.error('Error logging time data:', error);
                     // Navigate to the previous page even if logging fails
-                    window.location.href = 'http://localhost:5500/image/pre' + encodeURIComponent(patient_id);
+                    window.location.href = 'http://localhost:5500/image/' + encodeURIComponent(patient_id);
                 }
             });
         }

@@ -63,9 +63,6 @@
     <div style="position: absolute; top: 0; left: 0; padding: 10px;">
         <span style="font-size: 2em;">AI4VS LAB</span>
     </div>
-    <div class="button-container">
-        <button class="navigate-button" onclick="navigate()">Next</button>
-    </div>
     <!-- Main Container -->
     <div class="container">
         <!-- Image Grid -->
@@ -90,13 +87,6 @@
             }
         }
 
-        function navigate() {
-            try {
-                window.location.href = 'http://localhost:5500/image/' + encodeURIComponent(patient_id);
-            } catch (error) {
-                console.error('Error navigating to image page:', error);
-            }
-        }
 
         function requestFullScreen() {
             const elem = document.documentElement;
