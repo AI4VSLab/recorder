@@ -5,8 +5,10 @@ import random
 import shutil
 import os
 control_list = ['w3','w5','w7','w2','w1','n1','n2','n3','n5','n6','w6','w11','w8','w9','w10','n7','n8','n9','n10','n11'] 
-
+control_set1 = ['w3','w5','w7', 'w2','w1','n1','n2','n3','n5','n6']
+control_set2 = ['w6','w11','w8','w9','w10','n7','n8','n9','n10','n11']
 all_files = os.listdir('static/amd')
+control_var = 1
 
 # Extract unique identifiers from the filenames
 unique_identifiers = set()
@@ -20,16 +22,22 @@ w_identifiers = [item for item in unique_identifiers if item.startswith('w') and
 n_identifiers = [item for item in unique_identifiers if item.startswith('n') and item not in control_list]
 
 # Ensure there are enough items to select from
-if len(w_identifiers) < 10 or len(n_identifiers) < 10:
+if len(w_identifiers) < 5 or len(n_identifiers) < 5:
     raise ValueError("Not enough identifiers to select from. Please check the folder and control list.")
 
 # Randomly select 10 experimental items from each category
-experimental_w = random.sample(w_identifiers, 10)
-experimental_n = random.sample(n_identifiers, 10)
+experimental_w = random.sample(w_identifiers, 5)
+experimental_n = random.sample(n_identifiers, 5)
 
 # Combine the two lists
 experimental_list = experimental_w + experimental_n
-image_list = experimental_list + control_list
+curr_control = "control_set" + str(control_var)
+print(curr_control)
+if curr_control == "control_set1":
+    image_list = experimental_list + control_set1
+else:
+    image_list = experimental_list + control_set2
+
 print(f' len image list {len(image_list)}')
 
 k=0
@@ -259,7 +267,7 @@ def fullscreen_request():
 def home():
     shared_state.current_endpoint = 'home'
     if request.method == 'POST':
-        exp.update_last_row(request.form['text'], request.form['slider'])
+        exp.update_last_row(request.form['text'])
         return "success"
     else:
         exp.update_empty()
@@ -338,7 +346,7 @@ def image_page(patient_id):
         else:
             print('We are done with the experiment :)')
         if (patient_id != 'tutorial'):
-            exp.update_last_row(request.form['text'], request.form['slider'])
+            exp.update_last_row(request.form['text'])
         return "success"
     else:
         
@@ -412,32 +420,8 @@ def stop_experiment():
     global current_experiment_name
     # Check if the experiment name starts with "dr"
     if current_experiment_name.startswith('dr'):
-        # Get the list of all files in the directory
-        all_files = os.listdir("static/amd")
-        
-        # Extract unique identifiers from the filenames
-        unique_identifiers = set()
-        for file in all_files:
-            if file.endswith('.png'):  # assuming the images are .png files
-                identifier = file.split('_')[0]
-                unique_identifiers.add(identifier)
-        
-        # Separate identifiers into 'w' and 'n'
-        w_identifiers = [item for item in unique_identifiers if item.startswith('w') and item not in control_list]
-        n_identifiers = [item for item in unique_identifiers if item.startswith('n') and item not in control_list]
-        
-        # Ensure there are enough items to select from
-        if len(w_identifiers) < 10 or len(n_identifiers) < 10:
-            return "Not enough identifiers to select from. Please check the folder and control list.", 400
-        
-        # Randomly select 10 experimental items from each category
-        experimental_w = random.sample(w_identifiers, 10)
-        experimental_n = random.sample(n_identifiers, 10)
-        
-        # Combine the two lists
-        experimental_list = experimental_w + experimental_n
-        
         # Generate the image list with suffixes and move images
+        global experimental_list
         image_list = []
         for identifier in experimental_list:
             for i in range(1, 6):  # Assuming each identifier has 5 images
@@ -456,6 +440,7 @@ def stop_experiment():
 
 @app.route('/start', methods=['POST'])
 def start_experiment():
+    global current_experiment_name
     experiment_name = request.form['exp_name']
     total_samples = request.form['exp_count']
     current_experiment_name = experiment_name
