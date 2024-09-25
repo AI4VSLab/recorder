@@ -11,6 +11,7 @@ k=0
 
 global current_experiment_name 
 global current_experiment_id 
+global experimental_list
 
 current_experiment_name = " "
 current_experiment_id = " "
@@ -208,8 +209,6 @@ def record_audio(image_id, exp_id, input_device_index=None):
 
 
 
-
-
 def start_recording(image_id):
     '''
     note: image_id is current cound
@@ -291,12 +290,19 @@ def one_image_page(patient_id,j):
 @app.route('/image/<patient_id>', methods=['GET', 'POST'])
 def image_page(patient_id):
     shared_state.current_endpoint = f'/image/{patient_id}'
+    
+    
+
     if (patient_id == 'tutorial'):
         next_patient_id = 'start'
     elif (image_list.index(patient_id)+1 == exp.tot_count):
+        print('\n'*5)
+        print(f'image_list.index(patient_id) {image_list.index(patient_id)}')
+        print('\n'*5)
         next_patient_id = ''
     else:
         next_patient_id = image_list[image_list.index(patient_id)+1]
+
 
     if request.method == 'POST':
         print('submit clicked!')
@@ -384,7 +390,14 @@ def get_experiment_status():
 @app.route('/stop', methods=['POST'])
 def stop_experiment():
     global current_experiment_name
+    global image_list
     # Check if the experiment name starts with "dr"
+
+    print('\n'*5)
+    print('stop exp')
+    print(image_list)
+    print('\n'*5)
+
     if current_experiment_name.startswith('dr'):
         # Generate the image list with suffixes and move images
         global experimental_list
@@ -402,6 +415,9 @@ def stop_experiment():
         print("Experimental List:", experimental_list)
         print("Image List:", image_list)
     exp.end()
+
+
+
     return "success"
 
 @app.route('/start', methods=['POST'])
@@ -410,7 +426,13 @@ def start_experiment():
     global control_var
     global image_list
     experiment_name = request.form['exp_name']
-    total_samples = request.form['exp_count']
+    exp.tot_count = request.form['exp_count']
+    
+    print('\n'*5)
+    print('exp total count', exp.tot_count)
+    print('\n'*5)
+
+
     control_var = request.form['control_set']
     control_list = ['w3','w5','w7','w2','w1','n1','n2','n3','n5','n6','w6','w11','w8','w9','w10','n7','n8','n9','n10','n11'] 
     control_set1 = ['w3','w5','w7', 'w2','w1','n1','n2','n3','n5','n6']
@@ -437,18 +459,27 @@ def start_experiment():
     experimental_n = random.sample(n_identifiers, 5)
 
     # Combine the two lists
+    global experimental_list
     experimental_list = experimental_w + experimental_n
+
+    
     curr_control = "control_set" + str(control_var)
     print(curr_control)
+    
     if curr_control == "control_set1":
         image_list = experimental_list + control_set1
     else:
         image_list = experimental_list + control_set2
-        current_experiment_name = experiment_name
-        current_experiment_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        csv_file_path = os.path.join(CSV_DIR, f'{current_experiment_name}_times.csv')
+    
+    current_experiment_name = experiment_name
+    current_experiment_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    csv_file_path = os.path.join(CSV_DIR, f'{current_experiment_name}_times.csv')
         
     random.shuffle(image_list)
+    print('\n'*5)
+    print('start exp')
+    print(image_list)
+    print('\n'*5)
 
     # Create the CSV file and write headers if it doesn't exist
     if not os.path.exists(csv_file_path):
