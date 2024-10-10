@@ -1,35 +1,351 @@
 File,Transcript,Confidence,TimeStamps
-0_output.wav_alternative_0,recording audio I don't know first and then change,0.8919374942779541,"Word: recording, start_time: 0.9, end_time: 2.2
-Word: audio, start_time: 2.2, end_time: 2.4
-Word: I, start_time: 2.4, end_time: 3.8
-Word: don't, start_time: 3.8, end_time: 4.0
-Word: know, start_time: 4.0, end_time: 4.1
-Word: first, start_time: 4.1, end_time: 5.1
-Word: and, start_time: 5.1, end_time: 5.3
-Word: then, start_time: 5.3, end_time: 5.5
-Word: change, start_time: 5.5, end_time: 5.7
+test_kavi_2024-04-25_12-55-48/0_output.wav_alternative_0,okay cool,0.9736298322677612,"Word: okay, start_time: 1.4, end_time: 2.1
+Word: cool, start_time: 2.1, end_time: 2.6
 "
-2_output.wav_alternative_0,this is such a cool image,0.9319213032722473,"Word: this, start_time: 0.9, end_time: 1.3
-Word: is, start_time: 1.3, end_time: 1.5
-Word: such, start_time: 1.5, end_time: 1.9
-Word: a, start_time: 1.9, end_time: 2.0
-Word: cool, start_time: 2.0, end_time: 2.4
-Word: image, start_time: 2.4, end_time: 2.9
+test_kavi_2024-04-25_12-55-48/0_output.wav_alternative_1, this is the Box okay so it's not doing relaxation yet okay okay but I have to type something or it doesn't matter,0.9527500867843628,"Word: this, start_time: 5.9, end_time: 6.3
+Word: is, start_time: 6.3, end_time: 6.5
+Word: the, start_time: 6.5, end_time: 6.6
+Word: Box, start_time: 6.6, end_time: 6.8
+Word: okay, start_time: 6.8, end_time: 7.4
+Word: so, start_time: 7.4, end_time: 8.8
+Word: it's, start_time: 8.8, end_time: 9.0
+Word: not, start_time: 9.0, end_time: 9.2
+Word: doing, start_time: 9.2, end_time: 9.5
+Word: relaxation, start_time: 9.5, end_time: 10.7
+Word: yet, start_time: 10.7, end_time: 10.9
+Word: okay, start_time: 10.9, end_time: 11.2
+Word: okay, start_time: 11.2, end_time: 11.5
+Word: but, start_time: 11.5, end_time: 12.4
+Word: I, start_time: 12.4, end_time: 12.5
+Word: have, start_time: 12.5, end_time: 12.5
+Word: to, start_time: 12.5, end_time: 12.7
+Word: type, start_time: 12.7, end_time: 12.9
+Word: something, start_time: 12.9, end_time: 13.2
+Word: or, start_time: 13.2, end_time: 13.4
+Word: it, start_time: 13.4, end_time: 13.5
+Word: doesn't, start_time: 13.5, end_time: 13.6
+Word: matter, start_time: 13.6, end_time: 14.0
 "
-2_output.wav_alternative_1, lost one recording yes recording okay,0.8649641871452332,"Word: lost, start_time: 3.8, end_time: 5.2
-Word: one, start_time: 5.2, end_time: 5.4
-Word: recording, start_time: 5.4, end_time: 7.9
-Word: yes, start_time: 7.9, end_time: 9.0
-Word: recording, start_time: 9.0, end_time: 9.7
-Word: okay, start_time: 9.7, end_time: 10.1
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_0,so that this is the type of thing that well maybe this is just a tutorial part David but,0.9112903475761414,"Word: so, start_time: 3.7, end_time: 4.1
+Word: that, start_time: 4.1, end_time: 4.3
+Word: this, start_time: 4.3, end_time: 4.4
+Word: is, start_time: 4.4, end_time: 4.6
+Word: the, start_time: 4.6, end_time: 4.7
+Word: type, start_time: 4.7, end_time: 4.9
+Word: of, start_time: 4.9, end_time: 5.0
+Word: thing, start_time: 5.0, end_time: 5.1
+Word: that, start_time: 5.1, end_time: 5.4
+Word: well, start_time: 5.4, end_time: 5.8
+Word: maybe, start_time: 5.8, end_time: 6.1
+Word: this, start_time: 6.1, end_time: 6.6
+Word: is, start_time: 6.6, end_time: 6.8
+Word: just, start_time: 6.8, end_time: 6.9
+Word: a, start_time: 6.9, end_time: 7.1
+Word: tutorial, start_time: 7.1, end_time: 7.3
+Word: part, start_time: 7.3, end_time: 8.0
+Word: David, start_time: 8.0, end_time: 8.4
+Word: but, start_time: 8.4, end_time: 8.7
 "
-1_output.wav_alternative_0,you want to say something to sleep,0.8739408254623413,"Word: you, start_time: 1.0, end_time: 1.4
-Word: want, start_time: 1.4, end_time: 1.5
-Word: to, start_time: 1.5, end_time: 1.6
-Word: say, start_time: 1.6, end_time: 1.7
-Word: something, start_time: 1.7, end_time: 1.9
-Word: to, start_time: 1.9, end_time: 3.4
-Word: sleep, start_time: 3.4, end_time: 3.8
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_1, okay,0.9729730486869812,"Word: okay, start_time: 13.1, end_time: 13.7
 "
-1_output.wav_alternative_1, okay,0.9000630974769592,"Word: okay, start_time: 9.2, end_time: 9.6
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_2, okay,0.9729831218719482,"Word: okay, start_time: 17.2, end_time: 17.8
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_3, okay nice,0.9938145279884338,"Word: okay, start_time: 22.4, end_time: 23.0
+Word: nice, start_time: 23.0, end_time: 23.5
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_4, okay,0.8131449818611145,"Word: okay, start_time: 27.2, end_time: 27.8
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_5, okay this is interesting so this is the first time I'm seeing a Zeiss panel map,0.9627979397773743,"Word: okay, start_time: 29.0, end_time: 29.6
+Word: this, start_time: 29.6, end_time: 30.1
+Word: is, start_time: 30.1, end_time: 30.4
+Word: interesting, start_time: 30.4, end_time: 30.4
+Word: so, start_time: 30.4, end_time: 31.7
+Word: this, start_time: 31.7, end_time: 31.8
+Word: is, start_time: 31.8, end_time: 32.1
+Word: the, start_time: 32.1, end_time: 32.3
+Word: first, start_time: 32.3, end_time: 32.5
+Word: time, start_time: 32.5, end_time: 32.7
+Word: I'm, start_time: 32.7, end_time: 32.9
+Word: seeing, start_time: 32.9, end_time: 33.2
+Word: a, start_time: 33.2, end_time: 33.4
+Word: Zeiss, start_time: 33.4, end_time: 34.9
+Word: panel, start_time: 34.9, end_time: 36.5
+Word: map, start_time: 36.5, end_time: 36.8
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_6, so okay I have to give my,0.9652977585792542,"Word: so, start_time: 42.4, end_time: 42.8
+Word: okay, start_time: 42.8, end_time: 43.4
+Word: I, start_time: 43.4, end_time: 44.1
+Word: have, start_time: 44.1, end_time: 44.3
+Word: to, start_time: 44.3, end_time: 44.4
+Word: give, start_time: 44.4, end_time: 44.6
+Word: my, start_time: 44.6, end_time: 44.8
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_7, response on the next flight,0.8840798139572144,"Word: response, start_time: 45.8, end_time: 46.5
+Word: on, start_time: 46.5, end_time: 46.6
+Word: the, start_time: 46.6, end_time: 46.7
+Word: next, start_time: 46.7, end_time: 47.0
+Word: flight, start_time: 47.0, end_time: 47.1
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_8, okay,0.9729831218719482,"Word: okay, start_time: 49.6, end_time: 50.2
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_9, I don't think I know how to interpret these as well as the topcon but I do see this accurate type of shape in the deviation rap so I thought so they can also type right or the idea that idea is actually that we can avoid them having to type but but I guess there's no harm,0.9292029142379761,"Word: I, start_time: 51.7, end_time: 53.6
+Word: don't, start_time: 53.6, end_time: 53.9
+Word: think, start_time: 53.9, end_time: 54.1
+Word: I, start_time: 54.1, end_time: 54.2
+Word: know, start_time: 54.2, end_time: 54.4
+Word: how, start_time: 54.4, end_time: 54.5
+Word: to, start_time: 54.5, end_time: 54.5
+Word: interpret, start_time: 54.5, end_time: 56.1
+Word: these, start_time: 56.1, end_time: 56.5
+Word: as, start_time: 56.5, end_time: 56.7
+Word: well, start_time: 56.7, end_time: 56.7
+Word: as, start_time: 56.7, end_time: 57.0
+Word: the, start_time: 57.0, end_time: 57.1
+Word: topcon, start_time: 57.1, end_time: 57.7
+Word: but, start_time: 57.7, end_time: 59.2
+Word: I, start_time: 59.2, end_time: 59.2
+Word: do, start_time: 59.2, end_time: 59.4
+Word: see, start_time: 59.4, end_time: 59.7
+Word: this, start_time: 59.7, end_time: 60.0
+Word: accurate, start_time: 60.0, end_time: 62.0
+Word: type, start_time: 62.0, end_time: 62.2
+Word: of, start_time: 62.2, end_time: 62.3
+Word: shape, start_time: 62.3, end_time: 62.6
+Word: in, start_time: 62.6, end_time: 62.8
+Word: the, start_time: 62.8, end_time: 62.9
+Word: deviation, start_time: 62.9, end_time: 63.5
+Word: rap, start_time: 63.5, end_time: 63.7
+Word: so, start_time: 63.7, end_time: 64.0
+Word: I, start_time: 64.0, end_time: 64.5
+Word: thought, start_time: 64.5, end_time: 64.7
+Word: so, start_time: 64.7, end_time: 65.2
+Word: they, start_time: 65.2, end_time: 65.3
+Word: can, start_time: 65.3, end_time: 65.5
+Word: also, start_time: 65.5, end_time: 65.7
+Word: type, start_time: 65.7, end_time: 66.2
+Word: right, start_time: 66.2, end_time: 66.4
+Word: or, start_time: 66.4, end_time: 66.5
+Word: the, start_time: 66.5, end_time: 66.6
+Word: idea, start_time: 66.6, end_time: 66.7
+Word: that, start_time: 66.7, end_time: 67.1
+Word: idea, start_time: 67.1, end_time: 67.8
+Word: is, start_time: 67.8, end_time: 67.9
+Word: actually, start_time: 67.9, end_time: 68.2
+Word: that, start_time: 68.2, end_time: 68.3
+Word: we, start_time: 68.3, end_time: 68.5
+Word: can, start_time: 68.5, end_time: 68.6
+Word: avoid, start_time: 68.6, end_time: 68.9
+Word: them, start_time: 68.9, end_time: 69.2
+Word: having, start_time: 69.2, end_time: 69.7
+Word: to, start_time: 69.7, end_time: 69.8
+Word: type, start_time: 69.8, end_time: 70.0
+Word: but, start_time: 70.0, end_time: 70.5
+Word: but, start_time: 70.5, end_time: 71.3
+Word: I, start_time: 71.3, end_time: 71.4
+Word: guess, start_time: 71.4, end_time: 71.5
+Word: there's, start_time: 71.5, end_time: 71.9
+Word: no, start_time: 71.9, end_time: 72.0
+Word: harm, start_time: 72.0, end_time: 72.1
+"
+test_kavi_2024-04-25_12-55-48/1_output.wav_alternative_10, yeah,0.8486535549163818,"Word: yeah, start_time: 74.5, end_time: 74.9
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_0,okay nice,0.9938145279884338,"Word: okay, start_time: 2.0, end_time: 2.6
+Word: nice, start_time: 2.6, end_time: 3.1
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_1, okay,0.5715938210487366,"Word: okay, start_time: 6.8, end_time: 7.5
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_2, okay this is interesting so this is the first time I'm seeing a Zeiss panel map,0.966373860836029,"Word: okay, start_time: 8.7, end_time: 9.3
+Word: this, start_time: 9.3, end_time: 9.8
+Word: is, start_time: 9.8, end_time: 10.0
+Word: interesting, start_time: 10.0, end_time: 10.1
+Word: so, start_time: 10.1, end_time: 11.4
+Word: this, start_time: 11.4, end_time: 11.4
+Word: is, start_time: 11.4, end_time: 11.8
+Word: the, start_time: 11.8, end_time: 11.9
+Word: first, start_time: 11.9, end_time: 12.1
+Word: time, start_time: 12.1, end_time: 12.3
+Word: I'm, start_time: 12.3, end_time: 12.6
+Word: seeing, start_time: 12.6, end_time: 12.9
+Word: a, start_time: 12.9, end_time: 13.1
+Word: Zeiss, start_time: 13.1, end_time: 14.5
+Word: panel, start_time: 14.5, end_time: 16.1
+Word: map, start_time: 16.1, end_time: 16.5
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_3, so okay I have to give my,0.9787505865097046,"Word: so, start_time: 22.1, end_time: 22.5
+Word: okay, start_time: 22.5, end_time: 23.1
+Word: I, start_time: 23.1, end_time: 23.8
+Word: have, start_time: 23.8, end_time: 24.0
+Word: to, start_time: 24.0, end_time: 24.0
+Word: give, start_time: 24.0, end_time: 24.2
+Word: my, start_time: 24.2, end_time: 24.4
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_4, response on the next flight,0.8770182728767395,"Word: response, start_time: 25.5, end_time: 26.2
+Word: on, start_time: 26.2, end_time: 26.3
+Word: the, start_time: 26.3, end_time: 26.3
+Word: next, start_time: 26.3, end_time: 26.6
+Word: flight, start_time: 26.6, end_time: 26.8
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_5, okay,0.9729831218719482,"Word: okay, start_time: 29.3, end_time: 29.9
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_6, I don't think I know how to interpret these as well as the topcon but I do see this accurate type of shape in the deviation so I thought so they can also type right or the idea that idea is actually that we can avoid them having to type but but I guess there's no harm,0.9613651037216187,"Word: I, start_time: 31.4, end_time: 33.3
+Word: don't, start_time: 33.3, end_time: 33.5
+Word: think, start_time: 33.5, end_time: 33.7
+Word: I, start_time: 33.7, end_time: 33.8
+Word: know, start_time: 33.8, end_time: 34.0
+Word: how, start_time: 34.0, end_time: 34.2
+Word: to, start_time: 34.2, end_time: 34.2
+Word: interpret, start_time: 34.2, end_time: 35.8
+Word: these, start_time: 35.8, end_time: 36.1
+Word: as, start_time: 36.1, end_time: 36.3
+Word: well, start_time: 36.3, end_time: 36.4
+Word: as, start_time: 36.4, end_time: 36.7
+Word: the, start_time: 36.7, end_time: 36.8
+Word: topcon, start_time: 36.8, end_time: 37.4
+Word: but, start_time: 37.4, end_time: 38.8
+Word: I, start_time: 38.8, end_time: 38.9
+Word: do, start_time: 38.9, end_time: 39.1
+Word: see, start_time: 39.1, end_time: 39.3
+Word: this, start_time: 39.3, end_time: 39.6
+Word: accurate, start_time: 39.6, end_time: 41.6
+Word: type, start_time: 41.6, end_time: 41.8
+Word: of, start_time: 41.8, end_time: 42.0
+Word: shape, start_time: 42.0, end_time: 42.3
+Word: in, start_time: 42.3, end_time: 42.4
+Word: the, start_time: 42.4, end_time: 42.5
+Word: deviation, start_time: 42.5, end_time: 43.1
+Word: so, start_time: 43.1, end_time: 43.7
+Word: I, start_time: 43.7, end_time: 44.1
+Word: thought, start_time: 44.1, end_time: 44.4
+Word: so, start_time: 44.4, end_time: 44.9
+Word: they, start_time: 44.9, end_time: 45.0
+Word: can, start_time: 45.0, end_time: 45.1
+Word: also, start_time: 45.1, end_time: 45.4
+Word: type, start_time: 45.4, end_time: 45.8
+Word: right, start_time: 45.8, end_time: 46.0
+Word: or, start_time: 46.0, end_time: 46.1
+Word: the, start_time: 46.1, end_time: 46.3
+Word: idea, start_time: 46.3, end_time: 46.4
+Word: that, start_time: 46.4, end_time: 46.7
+Word: idea, start_time: 46.7, end_time: 47.4
+Word: is, start_time: 47.4, end_time: 47.6
+Word: actually, start_time: 47.6, end_time: 47.9
+Word: that, start_time: 47.9, end_time: 48.0
+Word: we, start_time: 48.0, end_time: 48.1
+Word: can, start_time: 48.1, end_time: 48.3
+Word: avoid, start_time: 48.3, end_time: 48.6
+Word: them, start_time: 48.6, end_time: 48.9
+Word: having, start_time: 48.9, end_time: 49.3
+Word: to, start_time: 49.3, end_time: 49.5
+Word: type, start_time: 49.5, end_time: 49.6
+Word: but, start_time: 49.6, end_time: 50.1
+Word: but, start_time: 50.1, end_time: 51.0
+Word: I, start_time: 51.0, end_time: 51.1
+Word: guess, start_time: 51.1, end_time: 51.1
+Word: there's, start_time: 51.1, end_time: 51.5
+Word: no, start_time: 51.5, end_time: 51.6
+Word: harm, start_time: 51.6, end_time: 51.7
+"
+test_kavi_2024-04-25_12-55-48/2_output.wav_alternative_7, yeah,0.848750650882721,"Word: yeah, start_time: 54.1, end_time: 54.6
+"
+test_kavi_2024-04-25_12-55-48/3_output.wav_alternative_0,okay because because whatever they say hopefully should,0.9484718441963196,"Word: okay, start_time: 1.3, end_time: 1.9
+Word: because, start_time: 1.9, end_time: 2.3
+Word: because, start_time: 2.3, end_time: 3.1
+Word: whatever, start_time: 3.1, end_time: 3.4
+Word: they, start_time: 3.4, end_time: 3.7
+Word: say, start_time: 3.7, end_time: 3.9
+Word: hopefully, start_time: 3.9, end_time: 4.4
+Word: should, start_time: 4.4, end_time: 4.6
+"
+test_kavi_2024-04-25_12-55-48/3_output.wav_alternative_1, should correspond to what they would type,0.967353343963623,"Word: should, start_time: 5.6, end_time: 6.7
+Word: correspond, start_time: 6.7, end_time: 7.2
+Word: to, start_time: 7.2, end_time: 7.4
+Word: what, start_time: 7.4, end_time: 7.5
+Word: they, start_time: 7.5, end_time: 7.7
+Word: would, start_time: 7.7, end_time: 7.9
+Word: type, start_time: 7.9, end_time: 8.2
+"
+test_kavi_2024-04-25_12-55-48/3_output.wav_alternative_2, so there are 20 of these all right is that okay yeah I guess just just to get the it will it will translate even if,0.9342936873435974,"Word: so, start_time: 10.9, end_time: 11.3
+Word: there, start_time: 11.3, end_time: 11.5
+Word: are, start_time: 11.5, end_time: 11.6
+Word: 20, start_time: 11.6, end_time: 11.9
+Word: of, start_time: 11.9, end_time: 12.0
+Word: these, start_time: 12.0, end_time: 12.2
+Word: all, start_time: 12.2, end_time: 12.8
+Word: right, start_time: 12.8, end_time: 13.0
+Word: is, start_time: 13.0, end_time: 13.7
+Word: that, start_time: 13.7, end_time: 13.9
+Word: okay, start_time: 13.9, end_time: 15.2
+Word: yeah, start_time: 15.2, end_time: 15.6
+Word: I, start_time: 15.6, end_time: 16.0
+Word: guess, start_time: 16.0, end_time: 16.4
+Word: just, start_time: 16.4, end_time: 16.9
+Word: just, start_time: 16.9, end_time: 17.4
+Word: to, start_time: 17.4, end_time: 17.6
+Word: get, start_time: 17.6, end_time: 17.8
+Word: the, start_time: 17.8, end_time: 18.1
+Word: it, start_time: 18.1, end_time: 19.1
+Word: will, start_time: 19.1, end_time: 19.6
+Word: it, start_time: 19.6, end_time: 20.6
+Word: will, start_time: 20.6, end_time: 21.0
+Word: translate, start_time: 21.0, end_time: 21.8
+Word: even, start_time: 21.8, end_time: 22.3
+Word: if, start_time: 22.3, end_time: 22.4
+"
+test_kavi_2024-04-25_12-55-48/3_output.wav_alternative_3, okay,0.9729831218719482,"Word: okay, start_time: 23.9, end_time: 24.5
+"
+test_kavi_2024-04-25_12-55-48/3_output.wav_alternative_4, I think this is healthy because I don't see it clear,0.8998777270317078,"Word: I, start_time: 26.2, end_time: 27.6
+Word: think, start_time: 27.6, end_time: 27.9
+Word: this, start_time: 27.9, end_time: 28.0
+Word: is, start_time: 28.0, end_time: 28.1
+Word: healthy, start_time: 28.1, end_time: 29.5
+Word: because, start_time: 29.5, end_time: 29.7
+Word: I, start_time: 29.7, end_time: 30.0
+Word: don't, start_time: 30.0, end_time: 30.2
+Word: see, start_time: 30.2, end_time: 30.5
+Word: it, start_time: 30.5, end_time: 30.6
+Word: clear, start_time: 30.6, end_time: 30.9
+"
+test_kavi_2024-04-25_12-55-48/4_output.wav_alternative_0,but this is actually much harder I'm not used to this,0.9805024862289429,"Word: but, start_time: 2.9, end_time: 4.4
+Word: this, start_time: 4.4, end_time: 4.6
+Word: is, start_time: 4.6, end_time: 4.8
+Word: actually, start_time: 4.8, end_time: 4.9
+Word: much, start_time: 4.9, end_time: 5.4
+Word: harder, start_time: 5.4, end_time: 5.8
+Word: I'm, start_time: 5.8, end_time: 6.0
+Word: not, start_time: 6.0, end_time: 6.2
+Word: used, start_time: 6.2, end_time: 6.4
+Word: to, start_time: 6.4, end_time: 6.5
+Word: this, start_time: 6.5, end_time: 6.7
+"
+test_kavi_2024-04-25_12-55-48/4_output.wav_alternative_1, and this is supposedly what the Clint of the residents find easier,0.918470561504364,"Word: and, start_time: 8.2, end_time: 8.6
+Word: this, start_time: 8.6, end_time: 8.7
+Word: is, start_time: 8.7, end_time: 8.9
+Word: supposedly, start_time: 8.9, end_time: 9.3
+Word: what, start_time: 9.3, end_time: 9.5
+Word: the, start_time: 9.5, end_time: 9.6
+Word: Clint, start_time: 9.6, end_time: 9.9
+Word: of, start_time: 9.9, end_time: 10.1
+Word: the, start_time: 10.1, end_time: 10.2
+Word: residents, start_time: 10.2, end_time: 10.8
+Word: find, start_time: 10.8, end_time: 11.1
+Word: easier, start_time: 11.1, end_time: 11.5
+"
+test_kavi_2024-04-25_12-55-48/5_output.wav_alternative_0,and then on this side they get to give their response so I don't know this is Maybe,0.9493415355682373,"Word: and, start_time: 0.3, end_time: 0.8
+Word: then, start_time: 0.8, end_time: 0.9
+Word: on, start_time: 0.9, end_time: 1.0
+Word: this, start_time: 1.0, end_time: 1.1
+Word: side, start_time: 1.1, end_time: 1.4
+Word: they, start_time: 1.4, end_time: 1.6
+Word: get, start_time: 1.6, end_time: 1.7
+Word: to, start_time: 1.7, end_time: 1.8
+Word: give, start_time: 1.8, end_time: 2.0
+Word: their, start_time: 2.0, end_time: 2.2
+Word: response, start_time: 2.2, end_time: 2.8
+Word: so, start_time: 2.8, end_time: 3.2
+Word: I, start_time: 3.2, end_time: 4.3
+Word: don't, start_time: 4.3, end_time: 4.5
+Word: know, start_time: 4.5, end_time: 4.6
+Word: this, start_time: 4.6, end_time: 4.8
+Word: is, start_time: 4.8, end_time: 4.9
+Word: Maybe, start_time: 4.9, end_time: 5.3
 "

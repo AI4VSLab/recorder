@@ -31,6 +31,7 @@ def delete_flac_files_in_bucket(bucket_name):
             blob.delete()
             print(f"Deleted {blob.name}")
 
+<<<<<<< HEAD:audio/script_new.py
 # Function to download a file from GCS
 def download_file_from_gcs(bucket_name, source_blob_name, destination_file_name):
     client = storage.Client()
@@ -75,7 +76,7 @@ def convert_wav_to_flac(folder_path_flac, wav_file, bucket_name):
     print(wav_file)
     print(f"Running command: {command}")
 
-    
+
     return flac_file if os.path.exists(flac_file) else None
 
 
@@ -88,13 +89,83 @@ def upload_to_bucket(bucket_name, local_file_path, destination_blob_name):
     print(f"Uploaded {local_file_path} to {destination_blob_name}")
     return destination_blob_name
 
-# Function to recognize audio using Google Speech-to-Text
+
+    print('\n'*5)
+    print('blob', blob)
+    print('\n'*5)
+
+def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file):
+    '''
+    @params:
+        bucket_name: str
+        folder_name: str
+        wav_file: blob object
+    @return:
+        destination_blob_name: path within bucket
+    '''
+    print('\n'*5)
+    print('convert_and_upload_files_in_folder wav_file', wav_file)
+    print('\n'*5)
+
+
+    flac_file = convert_wav_to_flac(wav_file)
+    if flac_file:
+        # Upload FLAC file to the bucket
+        destination_blob_name = os.path.join(folder_name, os.path.basename(flac_file))
+        upload_to_bucket(bucket_name, flac_file, destination_blob_name)
+        print(f"Uploaded {flac_file} to {destination_blob_name}")
+        # return os.path.join(folder_name, flac_file)
+        return destination_blob_name #flac_file
+    else:
+        print(f"Failed to convert {wav_file} to FLAC")
+        return None
+
+
+def list_files_in_folder(bucket_name, folder_name):
+    # Initialize GCS client
+    client = storage.Client()
+
+    # Get bucket
+    bucket = client.get_bucket(bucket_name)
+
+    # List blobs (files) in the specified folder
+    blobs = bucket.list_blobs(prefix=folder_name)
+
+    return blobs
+
+def json_csv(result, file_name, alt_num): 
+
+    alternative = result.alternatives[0]
+    result_timestamps_string = ""
+    for word_info in alternative.words:
+        word = word_info.word
+        start_time = word_info.start_time
+        end_time = word_info.end_time
+        timestamp_info = f"Word: {word}, start_time: {start_time.total_seconds()}, end_time: {end_time.total_seconds()}\n"
+        result_timestamps_string = result_timestamps_string + timestamp_info
+    file_name = file_name.name + "_" + "alternative" + "_" + str(alt_num)
+    df_iter = pd.DataFrame({'File': [file_name], 'Transcript': [alternative.transcript], "Confidence": [alternative.confidence], "TimeStamps" : [result_timestamps_string]})
+
+    return df_iter
+
+
+
 def recognize_audio(file_path):
     credentials = service_account.Credentials.from_service_account_file(
         "/home/sc4789/recorder/audio/ai4vslabrecordings-3897c071815b.json"
     )
 
-    client = speech.SpeechClient(credentials=credentials)
+
+    print('\n'*5)
+    print('file_path 2 recg', file_path)
+    print('\n'*5)
+
+
+    client = speech.SpeechClient()
+
+
+    # audio = speech.RecognitionAudio(content=file_content)
+    audio = {"uri": file_path}
 
     audio = speech.RecognitionAudio(uri=f"gs://{file_path}")
     print(audio)
@@ -149,8 +220,19 @@ def convert_and_upload_files_in_folder(bucket_name, folder_name, wav_file, folde
         print(f"Failed to convert {wav_file} to FLAC")
         return None
 
-def main():
-   
+
+    '''
+    Usage: 
+        argument 1: folder name
+        argument 2: bucket name
+    
+    '''
+    arguments = sys.argv[1:]
+    folder_path = arguments[0]
+    bucket_name = arguments[1]
+    print(f'We have folder_path: {folder_path}, bucket_name:{bucket_name} ')
+
+    output_file = str(folder_path) + "_output.csv"
 
     list_of_folders_in_gs = ['EEM_1_2024-04-30_12-59-28', 'EEM_2_2024-06-07_10-05-48', 'EEM_3_2024-06-25_13-10-47', 'EEM_4_2024-07-02_12-37-13', 'EEM_6_ set_1_2024-08-06_11-11-41', 'EEM_7_2024-09-06_13-32-31', 'EEM_8-2024-09-11-control-1', 'EEM_8-2024-9-11-control-2']
 
@@ -170,6 +252,7 @@ def main():
             if flac_file:
                 recognition_result = recognize_audio(f"audio_recordings_tobii_v1/{flac_file}")
                 print(recognition_result)
+
 
                 results = recognition_result.results
 
