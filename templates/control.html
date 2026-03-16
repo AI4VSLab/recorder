@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CONTROLLER</title>
+    <link rel="stylesheet" href="../static/sortable-theme-light.css" />
+	<script src="../static/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Helvetica
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Helvetica;
+        }
+        .btn {
+            border: 2px solid black;
+			margin-top: 20px;
+			font-size: 20px;
+			padding: 10px 20px;
+			border-radius: 10px;
+			background-color: #4CAF50;
+			color: white;
+			cursor: pointer;
+		}
+        .btn.disabled {
+            border: 2px solid black;
+			margin-top: 20px;
+			font-size: 20px;
+			padding: 10px 20px;
+			border-radius: 10px;
+			background-color: gray;
+			color: white;
+			cursor: not-allowed;
+		}
+
+    </style>
+</head>
+<body>
+    <!-- This div is at the top left like a logo: -->
+    <div style="position: absolute; top: 0; left: 0; padding: 10px;">
+        <span style="font-size: 2em;">AI4VS LAB</h1>
+    </div>
+    <!-- This div is at the top right like a navigation link: -->
+    <div style="position: absolute; top: 0; right: 0; padding: 20px;">
+        <a href="#">Merge with Tobii</a>
+    </div>
+    <div class = "container">
+        <h2>Experiment Controller</h2>
+        <!-- Things in this div, side by side at the center: -->
+        <div style="display: flex; flex-direction: row; justify-content: center; width: 100%;">
+            <!-- Things inside this div are at the center and vertical: -->
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                <label for="experiment_name_entry">Experiment Name:</label>
+                <input type="text" id="experiment_name_entry" name="experiment_name">
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                <label for="total_samples_entry">Total Samples:</label>
+                <input type="text" id="total_samples_entry" name="total_samples">
+            </div>
+
+        </div>
+        <!-- Make these lables look more like status with inline styling -->
+        <div style="display: flex; flex-direction: column; font-family: monospace; background-color: lightgray;">
+            <label id="status_display">Status: </label>
+            <label id="current_exp_id">Current Experiment ID: </label>
+        </div>
+        <button class = "btn" id="start_button" type="button">Start Experiment</button>
+        <button class = "btn disabled" id="stop_button" type="button" disabled>Stop Experiment</button><br><br>
+        <div style="display:flex; align-items: flex-start; justify-content: center; height: 50vh; width: 50vw;">
+            <table class="sortable-theme-light" data-sortable>
+                <thead>
+                    <tr>
+                        <th>Entry ID</th>
+                        <th>Text Input</th>
+                        <th>Slider Score</th>
+                        <th>Time of Input</th>
+                    </tr>
+                </thead>
+                <tbody id = "df_holder">
+                    <!-- <tr>
+                        <td>1</td>
+                        <td>Test</td>
+                        <td>5</td>
+                        <td>2021-09-01 12:00:00</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../static/sortable.min.js"></script>
+    <script>
+        // define start and stop behaviour funtions
+        function start_experiment() {
+            $("#experiment_name_entry").prop("disabled", true);
+            $("#total_samples_entry").prop("disabled", true);
+            $("#start_button").prop("disabled", true);
+            $("#start_button").addClass('disabled');
+
+            $("#stop_button").prop("disabled", false);
+            $("#stop_button").removeClass('disabled');
+            get_set_update()
+        }
+
+        function stop_experiment() {
+            $("#stop_button").prop("disabled", true);
+            $("#stop_button").addClass('disabled');
+
+            $("#experiment_name_entry").prop("disabled", false);
+            $("#total_samples_entry").prop("disabled", false);
+            $("#start_button").prop("disabled", false);
+            $("#start_button").removeClass('disabled');
+            get_set_update();
+        }
+
+        var last_edit_time = "";
+        var check_reloaded_flag = true;
+
+        function get_set_update() {
+            $.ajax({
+					url: "/get_status",
+					type: "GET",
+					success: function(data) {
+						$("#status_display").text("Status: " + data.current + " / " + data.total);
+                        $("#current_exp_id").text("Current Experiment ID: " + data.exp_id);
+
+                        var table_data = "";
+                        // console.log(data.df[0])
+
+                        if (data.df.length != 0 && data.df[data.df.length - 1].time != last_edit_time) {
+                            console.log("Updating table")
+                            last_edit_time = data.df[data.df.length - 1].time;
+
+                            for(i=0; i<data.df.length; i++) {
+                                table_data += "<tr>";
+                                table_data += "<td>" + i + "</td>";
+                                table_data += "<td>" + data.df[i].text + "</td>";
+                                table_data += "<td>" + data.df[i].score + "</td>";
+                                table_data += "<td>" + data.df[i].time + "</td>";
+                                table_data += "</tr>";
+                            }
+    
+                            $("#df_holder").html(table_data);
+                        }
+
+                        if (data.df.length == 0 && $("#df_holder").html() != ""){
+                            console.log("Clearing table")
+                            $("#df_holder").html("");
+                        }
+
+                        // When loading for first time, check if experiment was ongoing
+                        if (check_reloaded_flag) {
+                            check_reloaded_flag = false;
+                            console.log("Checking if reloaded")
+                            if (data.active == true) {
+                                start_experiment();
+                                $("#experiment_name_entry").val(data.exp_name);
+                                $("#total_samples_entry").val(data.total);
+                                console.log("Experiment was ongoing")
+                            }
+                            else{
+                                stop_experiment();
+                                console.log("Experiment was not ongoing")
+                            }
+                        }
+
+					},
+					error: function() {
+						$("#status_display").text("Status: Error");
+                        $("#current_exp_id").text("Current Experiment ID: Error");
+					}
+				});
+        }
+    </script>
+    <script>
+		$(document).ready(function() {
+
+            // Check if experiment was ongoing ans controller was reloaded
+            get_set_update()
+
+			// Start Experiment button handler
+			$("#start_button").click(function() {
+				var experiment_name = $("#experiment_name_entry").val();
+				var total_samples = $("#total_samples_entry").val();
+				$.ajax({
+					url: "/start",
+					type: "POST",
+					data: {"exp_name": experiment_name, "exp_count": total_samples},
+					success: start_experiment
+				});
+			});
+
+			// Stop Experiment button handler
+			$("#stop_button").click(function() {
+				$.ajax({
+					url: "/stop",
+					type: "POST",
+					data: {"text": "stop"},
+					success: stop_experiment
+				});
+			});
+
+			// Update status every 1000ms
+			setInterval(get_set_update, 1000);
+		});
+	</script>
+
+</body>
+</html>
