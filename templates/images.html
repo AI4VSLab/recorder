@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI4VS LAB — Diagnosis</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Logo ── */
+    .logo {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #111;
+      z-index: 10;
+    }
+
+    /* ── Timer ── */
+    #timer {
+      position: fixed;
+      top: 40px;
+      left: 16px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e53e3e;
+      z-index: 10;
+      line-height: 1;
+    }
+    #timer.warning { color: #e53e3e; }
+    #timer.ok      { color: #e53e3e; } /* always red per screenshot */
+
+    /* ── Progress ── */
+    .progress-badge {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      font-size: 0.9rem;
+      color: #555;
+      z-index: 10;
+    }
+
+    /* ── Main layout ── */
+    main {
+      width: 100%;
+      max-width: 960px;
+      padding: 60px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .prompt {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    /* ── Image grid ── */
+    .image-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .image-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .image-box {
+      width: 270px;
+      height: 190px;
+      background: #fdf9d9;
+      border: 1.5px solid #d4c97a;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Response area ── */
+    .response-section {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    textarea#diagnosis {
+      width: 100%;
+      height: 120px;
+      border: 1.5px solid #ccc;
+      border-radius: 14px;
+      background: #f4f4f4;
+      padding: 16px 20px;
+      font-size: 1rem;
+      color: #333;
+      resize: none;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    textarea#diagnosis::placeholder { color: #aaa; }
+    textarea#diagnosis:focus { border-color: #888; background: #fff; }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    button.submit-btn {
+      padding: 10px 28px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid #222;
+      background: #4caf50;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    button.submit-btn:hover  { background: #43a047; }
+    button.submit-btn:active { transform: scale(0.98); }
+    button.submit-btn:disabled {
+      background: #fff;
+      color: #aaa;
+      border-color: #ccc;
+      cursor: not-allowed;
+    }
+    button.submit-btn.success {
+      background: #fff;
+      color: #2e7d32;
+      border-color: #2e7d32;
+      cursor: default;
+    }
+    button.submit-btn.error {
+      background: #fff;
+      color: #c62828;
+      border-color: #c62828;
+      cursor: default;
+    }
+
+    /* ── Footer progress ── */
+    .footer-progress {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">AI4VS LAB</div>
+  <div id="timer">{{ timer_seconds }} s</div>
+  <div class="progress-badge">{{ current }} / {{ total }}</div>
+
+  <main>
+    <p class="prompt">Please type your diagnosis.</p>
+
+    <div class="image-grid">
+      <!-- Row 1: images 1–3 -->
+      <div class="image-row">
+        {% for img in case.images[:3] %}
+        <div class="image-box">
+          <img src="{{ img }}" alt="Image {{ loop.index }}" />
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Row 2: images 4–5 (centred) -->
+      {% if case.images|length > 3 %}
+      <div class="image-row">
+        {% for img in case.images[3:5] %}
+        <div class="image-box">
+          <img src="{{ img }}" alt="Image {{ loop.index + 3 }}" />
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="response-section">
+      <textarea id="diagnosis" placeholder="Type your response here"></textarea>
+      <div class="btn-row">
+        <button class="submit-btn" id="submitBtn">Submit</button>
+      </div>
+      <p class="footer-progress">Progress: {{ current }} / {{ total }}</p>
+    </div>
+  </main>
+
+  <script>
+    const TOTAL_SECONDS = {{ timer_seconds }};
+    let remaining = TOTAL_SECONDS;
+    let submitted = false;
+
+    const timerEl  = document.getElementById('timer');
+    const submitBtn = document.getElementById('submitBtn');
+    const diagnosisEl = document.getElementById('diagnosis');
+
+    /* ── Countdown ── */
+    const interval = setInterval(() => {
+      remaining--;
+      timerEl.textContent = remaining + ' s';
+      if (remaining <= 0) {
+        clearInterval(interval);
+        timerEl.textContent = '0 s';
+        if (!submitted) autoSubmit();
+      }
+    }, 1000);
+
+    /* ── Submit ── */
+    function doSubmit() {
+      if (submitted) return;
+      submitted = true;
+      clearInterval(interval);
+      submitBtn.disabled = true;
+
+      fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          diagnosis: diagnosisEl.value,
+          time_remaining: remaining,
+        }),
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'ok') {
+          submitBtn.classList.add('success');
+          submitBtn.textContent = data.done
+            ? 'Done ✅ — all cases complete'
+            : 'Saved ✅ — loading next…';
+          if (!data.done) {
+            setTimeout(() => { window.location.href = '/'; }, 800);
+          }
+        }
+      })
+      .catch(() => {
+        submitBtn.classList.add('error');
+        submitBtn.textContent = 'Error ❌ — check server';
+      });
+    }
+
+    function autoSubmit() {
+      diagnosisEl.placeholder = '(time expired — auto-submitted)';
+      doSubmit();
+    }
+
+    submitBtn.addEventListener('click', doSubmit);
+
+    /* ── F10 shortcut (mirrors baseline) ── */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F10') { e.preventDefault(); doSubmit(); }
+    });
+  </script>
+</body>
+</html>
