@@ -60,7 +60,6 @@ def images():
         case=case,
         current=idx + 1,
         total=len(CASES),
-        timer_seconds=30,
     )
 
 @app.route('/get_status', methods=['GET'])
