@@ -5,8 +5,12 @@
 
 from flask import Flask, request, render_template, jsonify, session
 from experiment import Experiment
+import json
+import os
 
 responses = []
+
+RESPONSES_PATH = "saves/responses.json"
 
 CASES = [
     {
@@ -71,13 +75,25 @@ def get_experiment_status():
 def submit():
     idx = session.get("case_index", 0)
     data = request.get_json()
-    responses.append(
-        {
-            "case_id": CASES[idx]["id"] if idx < len(CASES) else None,
-            "diagnosis": data.get("diagnosis", ""),
-            "time_remaining": data.get("time_remaining", 0),
-        }
-    )
+
+    record = {
+        "case_id":   CASES[idx]["id"] if idx < len(CASES) else None,
+        "diagnosis": data.get("diagnosis", ""),
+        "biomarkers": data.get("biomarkers", ""),   # comma-separated string
+    }
+    responses.append(record)
+
+    # Persist to saves/responses.json — append to existing array, create if missing
+    os.makedirs("saves", exist_ok=True)
+    if os.path.exists(RESPONSES_PATH):
+        with open(RESPONSES_PATH, "r") as f:
+            saved = json.load(f)
+    else:
+        saved = []
+    saved.append(record)
+    with open(RESPONSES_PATH, "w") as f:
+        json.dump(saved, f, indent=2)
+
     session["case_index"] = idx + 1
     next_idx = idx + 1
     return jsonify(
