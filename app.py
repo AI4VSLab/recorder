@@ -36,6 +36,7 @@ CASES = [
 ]
 
 app = Flask(__name__)
+app.secret_key = "ai4vs-secret-key"
 exp = Experiment()
 
 @app.route('/', methods=['GET', 'POST'])
