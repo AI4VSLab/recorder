@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI4VS LAB — Complete</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #eee;
+    }
+
+    .logo {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #eee;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 48px 64px;
+      border: 1.5px solid #333;
+      border-radius: 16px;
+      background: #242424;
+      text-align: center;
+    }
+
+    .checkmark {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #eee;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #888;
+    }
+
+    .total {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #4caf50;
+    }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">AI4VS LAB</div>
+
+  <div class="card">
+    <div class="checkmark">✅</div>
+    <h1>All cases complete</h1>
+    <div class="total">{{ total }} / {{ total }}</div>
+    <p>Thank you — your responses have been saved.</p>
+    <p class="hint">You may now close this window.</p>
+    <button onclick="resetSession()" style="
+      margin-top: 16px; padding: 8px 24px; font-size: 0.9rem;
+      border: 1.5px solid #444; border-radius: 8px;
+      background: #2a2a2a; color: #888; cursor: pointer;">
+      Reset for next participant
+    </button>
+  </div>
+
+  <script>
+    function resetSession() {
+      fetch('/reset', { method: 'POST' })
+        .then(() => { window.location.href = '/images'; });
+    }
+  </script>
+</body>
+</html>

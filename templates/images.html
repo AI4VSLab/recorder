@@ -210,6 +210,18 @@
       cursor: default;
     }
 
+    button.reset-btn {
+      padding: 10px 28px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1.5px solid #444;
+      background: #2a2a2a;
+      color: #888;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    button.reset-btn:hover { border-color: #666; color: #bbb; }
+
     /* ── Footer progress ── */
     .footer-progress {
       font-size: 0.85rem;
@@ -274,6 +286,7 @@
     <div class="btn-area">
       <div class="btn-row">
         <button class="submit-btn" id="submitBtn">Submit</button>
+        <button class="reset-btn" id="resetBtn">Reset session</button>
       </div>
       <p class="footer-progress">Progress: {{ current }} / {{ total }}</p>
     </div>
@@ -329,6 +342,11 @@
     }
 
     submitBtn.addEventListener('click', doSubmit);
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      fetch('/reset', { method: 'POST' })
+        .then(() => { window.location.href = '/images'; });
+    });
 
     /* ── F10 shortcut (mirrors baseline) ── */
     document.addEventListener('keydown', e => {

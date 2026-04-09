@@ -106,6 +106,11 @@ def submit():
         }
     )
 
+@app.route('/reset', methods=['POST'])
+def reset():
+    session.pop("case_index", None)
+    return "success"
+
 @app.route('/stop', methods=['POST'])
 def stop_experiment():
     exp.end()
