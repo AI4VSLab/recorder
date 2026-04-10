@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f0ead6"/>
+  <rect x="70" y="70" width="1060" height="760" rx="32" fill="#5b2c2c"/>
+  <text x="600" y="360" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="96" fill="#fff0d8">AMD_002</text>
+  <text x="600" y="470" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="40" fill="#f4c9c9">Mock stimulus for local Flask testing</text>
+</svg>
