@@ -75,36 +75,31 @@ def get_experiment_status():
 @app.route("/submit", methods=["POST"])
 def submit():
     idx = session.get("case_index", 0)
-    data = request.get_json()
+    data = request.get_json() or {}
 
     record = {
         "case_id":   CASES[idx]["id"] if idx < len(CASES) else None,
         "diagnosis": data.get("diagnosis", ""),
-        "biomarkers": data.get("biomarkers", ""),   # comma-separated string
+        "biomarkers": data.get("biomarkers", ""),
     }
     responses.append(record)
 
-    # Persist to saves/responses.json — append to existing array, create if missing
     os.makedirs("saves", exist_ok=True)
     if os.path.exists(RESPONSES_PATH):
         with open(RESPONSES_PATH, "r") as f:
             saved = json.load(f)
+            if not isinstance(saved, list):
+                saved = [saved]
     else:
         saved = []
+
     saved.append(record)
+
     with open(RESPONSES_PATH, "w") as f:
         json.dump(saved, f, indent=2)
 
     session["case_index"] = idx + 1
-    next_idx = idx + 1
-    return jsonify(
-        {
-            "status": "ok",
-            "done": next_idx >= len(CASES),
-            "next": next_idx + 1,
-            "total": len(CASES),
-        }
-    )
+    return jsonify({"status": "ok", "saved": True})
 
 @app.route('/reset', methods=['POST'])
 def reset():

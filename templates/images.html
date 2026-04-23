@@ -11,98 +11,31 @@
       font-family: Helvetica, Arial, sans-serif;
       background: #1a1a1a;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      place-items: center;
+      padding: 24px;
     }
 
-    /* ── Logo ── */
-    .logo {
-      position: fixed;
-      top: 12px;
-      left: 16px;
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      color: #eee;
-      z-index: 10;
-    }
-
-    /* ── Progress badge ── */
-    .progress-badge {
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      font-size: 0.9rem;
-      color: #aaa;
-      z-index: 10;
-    }
-
-    /* ── Main layout ── */
     main {
       width: 100%;
-      max-width: 960px;
-      padding: 60px 24px 40px;
+      max-width: 760px;
+      padding: 32px;
+      border: 1px solid #2f2f2f;
+      border-radius: 18px;
+      background: #202020;
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 24px;
     }
 
-    .prompt {
-      font-size: 1rem;
-      color: #ccc;
-      text-align: center;
-      max-width: 700px;
-      line-height: 1.5;
-    }
-
-    /* ── Image grid ── */
-    .image-grid {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .image-row {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    .image-box {
-      width: 270px;
-      height: 190px;
-      background: #fdf9d9;
-      border: 1.5px solid #d4c97a;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      font-size: 0.85rem;
-      color: #666;
-    }
-
-    .image-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* ── Response area ── */
     .response-section {
       width: 100%;
-      max-width: 700px;
       display: flex;
       flex-direction: row;
       gap: 16px;
       align-items: flex-start;
     }
 
-    /* ── Individual input panels ── */
     .input-panel {
       flex: 1;
       display: flex;
@@ -156,27 +89,17 @@
       height: 44px;
     }
 
-    /* ── Divider between the two panels ── */
     .panel-divider {
       width: 1px;
       background: #333;
       align-self: stretch;
-      margin: 28px 0 0;   /* push down to clear the label */
+      margin: 28px 0 0;
     }
 
-    /* ── Buttons row (below both panels) ── */
     .btn-area {
       width: 100%;
-      max-width: 700px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 10px;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 12px;
     }
 
     button.submit-btn {
@@ -197,12 +120,6 @@
       border-color: #444;
       cursor: not-allowed;
     }
-    button.submit-btn.success {
-      background: #2a2a2a;
-      color: #4caf50;
-      border-color: #4caf50;
-      cursor: default;
-    }
     button.submit-btn.error {
       background: #2a2a2a;
       color: #e53935;
@@ -210,61 +127,26 @@
       cursor: default;
     }
 
-    button.reset-btn {
-      padding: 10px 28px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1.5px solid #444;
-      background: #2a2a2a;
-      color: #888;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    button.reset-btn:hover { border-color: #666; color: #bbb; }
+    @media (max-width: 720px) {
+      main {
+        padding: 24px;
+      }
 
-    /* ── Footer progress ── */
-    .footer-progress {
-      font-size: 0.85rem;
-      color: #555;
+      .response-section {
+        flex-direction: column;
+      }
+
+      .panel-divider {
+        width: 100%;
+        height: 1px;
+        margin: 4px 0;
+      }
     }
   </style>
 </head>
 <body>
-
-  <div class="logo">AI4VS LAB</div>
-  <div class="progress-badge">{{ current }} / {{ total }}</div>
-
   <main>
-    <p class="prompt">
-      Give your diagnosis as a single label and list the biomarkers / features that led to your conclusion as a comma-separated list.
-    </p>
-
-    <div class="image-grid">
-      <!-- Row 1: images 1–3 -->
-      <div class="image-row">
-        {% for img in case.images[:3] %}
-        <div class="image-box">
-          <img src="{{ img }}" alt="Image {{ loop.index }}" />
-        </div>
-        {% endfor %}
-      </div>
-
-      <!-- Row 2: images 4–5 (centred) -->
-      {% if case.images|length > 3 %}
-      <div class="image-row">
-        {% for img in case.images[3:5] %}
-        <div class="image-box">
-          <img src="{{ img }}" alt="Image {{ loop.index + 3 }}" />
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    <!-- Two input boxes side by side -->
     <div class="response-section">
-
-      <!-- Left: Biomarkers -->
       <div class="input-panel">
         <label for="biomarkers">Biomarkers / Features</label>
         <span class="hint">Comma-separated list</span>
@@ -273,82 +155,69 @@
 
       <div class="panel-divider"></div>
 
-      <!-- Right: Diagnosis -->
       <div class="input-panel">
         <label for="diagnosis">Diagnosis</label>
         <span class="hint">Single label</span>
         <input type="text" id="diagnosis" placeholder="e.g. Glaucoma" />
       </div>
-
     </div>
 
-    <!-- Submit row below both panels -->
     <div class="btn-area">
-      <div class="btn-row">
-        <button class="submit-btn" id="submitBtn">Submit</button>
-        <button class="reset-btn" id="resetBtn">Reset session</button>
-      </div>
-      <p class="footer-progress">Progress: {{ current }} / {{ total }}</p>
+      <button class="submit-btn" id="submitBtn">Save and close</button>
     </div>
-
   </main>
 
   <script>
     let submitted = false;
 
-    const submitBtn   = document.getElementById('submitBtn');
+    const submitBtn = document.getElementById('submitBtn');
     const biomarkersEl = document.getElementById('biomarkers');
-    const diagnosisEl  = document.getElementById('diagnosis');
+    const diagnosisEl = document.getElementById('diagnosis');
 
-    /* ── Submit ── */
-    function doSubmit() {
+    function closePage() {
+      window.open('', '_self');
+      window.close();
+
+      setTimeout(() => {
+        document.body.innerHTML = '';
+      }, 150);
+    }
+
+    async function doSubmit() {
       if (submitted) return;
       submitted = true;
       submitBtn.disabled = true;
 
       const payload = {
-        diagnosis:  diagnosisEl.value.trim(),
+        diagnosis: diagnosisEl.value.trim(),
         biomarkers: biomarkersEl.value.trim(),
       };
 
-      // DEBUG: log to console for now
-      console.log('[AI4VS] Submitting payload:', payload);
+      try {
+        const response = await fetch('/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
 
-      fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      .then(r => r.json())
-      .then(data => {
-        console.log('[AI4VS] Server response:', data);
         if (data.status === 'ok') {
-          submitBtn.classList.add('success');
-          submitBtn.textContent = data.done
-            ? 'Done ✅ — all cases complete'
-            : 'Saved ✅ — loading next…';
-          if (!data.done) {
-            setTimeout(() => { window.location.href = '/images'; }, 800);
-          }
+          closePage();
+          return;
         }
-      })
-      .catch(err => {
+
+        throw new Error('Unexpected server response');
+      } catch (err) {
         console.error('[AI4VS] Submit error:', err);
         submitBtn.classList.add('error');
-        submitBtn.textContent = 'Error ❌ — check server';
+        submitBtn.textContent = 'Error - check server';
         submitted = false;
         submitBtn.disabled = false;
-      });
+      }
     }
 
     submitBtn.addEventListener('click', doSubmit);
 
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      fetch('/reset', { method: 'POST' })
-        .then(() => { window.location.href = '/images'; });
-    });
-
-    /* ── F10 shortcut (mirrors baseline) ── */
     document.addEventListener('keydown', e => {
       if (e.key === 'F10') { e.preventDefault(); doSubmit(); }
     });
