@@ -18,7 +18,7 @@
 
     main {
       width: 100%;
-      max-width: 760px;
+      max-width: 980px;
       padding: 32px;
       border: 1px solid #2f2f2f;
       border-radius: 18px;
@@ -28,11 +28,25 @@
       gap: 24px;
     }
 
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .progress-badge {
+      font-size: 0.9rem;
+      color: #b8b8b8;
+      border: 1px solid #3b3b3b;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #252525;
+    }
+
     .response-section {
       width: 100%;
       display: flex;
       flex-direction: row;
-      gap: 16px;
+      gap: 20px;
       align-items: flex-start;
     }
 
@@ -57,8 +71,7 @@
       margin-top: -4px;
     }
 
-    .input-panel textarea,
-    .input-panel input[type="text"] {
+    .other-input {
       width: 100%;
       border: 1.5px solid #444;
       border-radius: 10px;
@@ -70,61 +83,55 @@
       transition: border-color 0.15s, background 0.15s;
       font-family: Helvetica, Arial, sans-serif;
     }
-    .input-panel textarea::placeholder,
-    .input-panel input[type="text"]::placeholder { color: #555; }
-    .input-panel textarea:focus,
-    .input-panel input[type="text"]:focus {
+    .other-input::placeholder { color: #555; }
+    .other-input:focus {
       border-color: #777;
       background: #333;
     }
 
-    /* Biomarker box is taller since it's a list */
-    #biomarkers {
-      height: 140px;
-      resize: none;
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid #353535;
+      border-radius: 12px;
+      background: #1d1d1d;
     }
 
-    /* Diagnosis is a single-line text input */
-    #diagnosis {
-      height: 44px;
-    }
-
-    .panel-divider {
-      width: 1px;
-      background: #333;
-      align-self: stretch;
-      margin: 28px 0 0;
-    }
-
-    .btn-area {
-      width: 100%;
+    .checkbox-item {
       display: flex;
       align-items: center;
+      gap: 10px;
+      color: #dfdfdf;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
 
-    button.submit-btn {
-      padding: 10px 32px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 2px solid #4caf50;
-      background: #4caf50;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #4caf50;
+      flex-shrink: 0;
     }
-    button.submit-btn:hover  { background: #43a047; border-color: #43a047; }
-    button.submit-btn:active { transform: scale(0.98); }
-    button.submit-btn:disabled {
-      background: #2a2a2a;
-      color: #555;
-      border-color: #444;
-      cursor: not-allowed;
+
+    .other-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 6px;
+      border-top: 1px solid #2f2f2f;
     }
-    button.submit-btn.error {
-      background: #2a2a2a;
-      color: #e53935;
-      border-color: #e53935;
-      cursor: default;
+
+    .autosave-note {
+      width: 100%;
+      text-align: center;
+      color: #8e8e8e;
+      font-size: 0.88rem;
+    }
+
+    .hidden {
+      display: none;
     }
 
     @media (max-width: 720px) {
@@ -135,92 +142,129 @@
       .response-section {
         flex-direction: column;
       }
-
-      .panel-divider {
-        width: 100%;
-        height: 1px;
-        margin: 4px 0;
-      }
     }
   </style>
 </head>
 <body>
   <main>
+    <div class="topbar">
+      <div class="progress-badge">{{ current }} / {{ total }}</div>
+    </div>
+
     <div class="response-section">
       <div class="input-panel">
         <label for="biomarkers">Biomarkers / Features</label>
-        <span class="hint">Comma-separated list</span>
-        <textarea id="biomarkers" placeholder="e.g. cup-to-disc ratio, RNFL thinning, notching…"></textarea>
+        <span class="hint">Select all that apply</span>
+        <div class="checkbox-list" id="biomarkers">
+          {% for option in biomarker_options %}
+          <label class="checkbox-item">
+            <input
+              type="checkbox"
+              name="biomarkers"
+              value="{{ option }}"
+              {% if option == "Other" %}data-other-toggle="biomarkerOtherRow"{% endif %}
+            />
+            <span>{{ option }}</span>
+          </label>
+          {% endfor %}
+          <div class="other-row hidden" id="biomarkerOtherRow">
+            <input
+              type="text"
+              id="biomarkerOther"
+              class="other-input"
+              placeholder="Other biomarker / feature"
+            />
+          </div>
+        </div>
       </div>
-
-      <div class="panel-divider"></div>
 
       <div class="input-panel">
         <label for="diagnosis">Diagnosis</label>
-        <span class="hint">Single label</span>
-        <input type="text" id="diagnosis" placeholder="e.g. Glaucoma" />
+        <span class="hint">Select all that apply</span>
+        <div class="checkbox-list" id="diagnosis">
+          {% for option in diagnosis_options %}
+          <label class="checkbox-item">
+            <input
+              type="checkbox"
+              name="diagnoses"
+              value="{{ option }}"
+              {% if option == "Other" %}data-other-toggle="diagnosisOtherRow"{% endif %}
+            />
+            <span>{{ option }}</span>
+          </label>
+          {% endfor %}
+          <div class="other-row hidden" id="diagnosisOtherRow">
+            <input
+              type="text"
+              id="diagnosisOther"
+              class="other-input"
+              placeholder="Other diagnosis"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="btn-area">
-      <button class="submit-btn" id="submitBtn">Save and close</button>
-    </div>
+    <p class="autosave-note">Selections are saved automatically when this page closes.</p>
   </main>
 
   <script>
-    let submitted = false;
+    let autosaved = false;
 
-    const submitBtn = document.getElementById('submitBtn');
-    const biomarkersEl = document.getElementById('biomarkers');
-    const diagnosisEl = document.getElementById('diagnosis');
-
-    function closePage() {
-      window.open('', '_self');
-      window.close();
-
-      setTimeout(() => {
-        document.body.innerHTML = '';
-      }, 150);
+    function selectedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
     }
 
-    async function doSubmit() {
-      if (submitted) return;
-      submitted = true;
-      submitBtn.disabled = true;
-
-      const payload = {
-        diagnosis: diagnosisEl.value.trim(),
-        biomarkers: biomarkersEl.value.trim(),
+    function buildPayload() {
+      return {
+        biomarkers: selectedValues('biomarkers'),
+        diagnoses: selectedValues('diagnoses'),
+        biomarker_other: document.getElementById('biomarkerOther').value.trim(),
+        diagnosis_other: document.getElementById('diagnosisOther').value.trim(),
       };
+    }
 
-      try {
-        const response = await fetch('/submit', {
+    function sendAutosave() {
+      if (autosaved) return;
+      autosaved = true;
+
+      const payload = buildPayload();
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      if (!navigator.sendBeacon('/autosave', blob)) {
+        fetch('/autosave', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-        });
-        const data = await response.json();
-
-        if (data.status === 'ok') {
-          closePage();
-          return;
-        }
-
-        throw new Error('Unexpected server response');
-      } catch (err) {
-        console.error('[AI4VS] Submit error:', err);
-        submitBtn.classList.add('error');
-        submitBtn.textContent = 'Error - check server';
-        submitted = false;
-        submitBtn.disabled = false;
+          keepalive: true,
+        }).catch(() => {});
       }
     }
 
-    submitBtn.addEventListener('click', doSubmit);
+    document.querySelectorAll('[data-other-toggle]').forEach((checkbox) => {
+      const target = document.getElementById(checkbox.dataset.otherToggle);
+      checkbox.addEventListener('change', () => {
+        target.classList.toggle('hidden', !checkbox.checked);
+      });
+    });
+
+    document.querySelectorAll('input').forEach((input) => {
+      input.addEventListener('change', () => {
+        autosaved = false;
+      });
+      input.addEventListener('input', () => {
+        autosaved = false;
+      });
+    });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'F10') { e.preventDefault(); doSubmit(); }
+      if (e.key === 'F10') {
+        e.preventDefault();
+        sendAutosave();
+      }
     });
+
+    window.addEventListener('pagehide', sendAutosave);
+    window.addEventListener('beforeunload', sendAutosave);
   </script>
 </body>
 </html>

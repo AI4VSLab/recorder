@@ -11,33 +11,71 @@ import os
 responses = []
 
 RESPONSES_PATH = "saves/responses.json"
+TOTAL_CASES = int(os.environ.get("AI4VS_TOTAL_CASES", "20"))
+CASES = [{"id": idx} for idx in range(1, TOTAL_CASES + 1)]
 
-CASES = [
-    {
-        "id": 1,
-        "images": [
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+1",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+2",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+3",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+4",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+5",
-        ],
-    },
-    {
-        "id": 2,
-        "images": [
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+1",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+2",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+3",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+4",
-            "https://placehold.co/400x300/f5f0cc/333?text=Image+5",
-        ],
-    },
+BIOMARKER_OPTIONS = [
+    "Increased cup-to-disc ratio",
+    "Vertical cupping",
+    "Neuroretinal rim thinning",
+    "ISNT rule violation",
+    "RNFL thinning",
+    "Disc hemorrhage",
+    "Bayonetting of vessels",
+    "Nasalization of vessels",
+    "Peripapillary atrophy",
+    "Asymmetry between eyes",
+    "Optic disc pallor",
+    "Tilted disc",
+    "Vessel baring",
+    "Other",
+]
+
+DIAGNOSIS_OPTIONS = [
+    "Normal / no glaucoma",
+    "Glaucoma suspect",
+    "Glaucoma",
+    "Primary open-angle glaucoma",
+    "Normal-tension glaucoma",
+    "Angle-closure glaucoma",
+    "Advanced glaucoma",
+    "Other",
 ]
 
 app = Flask(__name__)
 app.secret_key = "ai4vs-secret-key"
 exp = Experiment()
+
+
+def load_saved_responses():
+    if not os.path.exists(RESPONSES_PATH):
+        return []
+
+    with open(RESPONSES_PATH, "r") as f:
+        saved = json.load(f)
+        if isinstance(saved, list):
+            return saved
+        return [saved]
+
+
+def persist_case_response(idx, data):
+    record = {
+        "case_id": CASES[idx]["id"] if idx < len(CASES) else None,
+        "diagnoses": data.get("diagnoses", []),
+        "diagnosis_other": data.get("diagnosis_other", ""),
+        "biomarkers": data.get("biomarkers", []),
+        "biomarker_other": data.get("biomarker_other", ""),
+    }
+
+    responses.append(record)
+    os.makedirs("saves", exist_ok=True)
+    saved = load_saved_responses()
+    saved.append(record)
+
+    with open(RESPONSES_PATH, "w") as f:
+        json.dump(saved, f, indent=2)
+
+    return record
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -65,6 +103,8 @@ def images():
         case=case,
         current=idx + 1,
         total=len(CASES),
+        biomarker_options=BIOMARKER_OPTIONS,
+        diagnosis_options=DIAGNOSIS_OPTIONS,
     )
 
 @app.route('/get_status', methods=['GET'])
@@ -76,34 +116,39 @@ def get_experiment_status():
 def submit():
     idx = session.get("case_index", 0)
     data = request.get_json() or {}
+    persist_case_response(idx, data)
+    session["case_index"] = min(idx + 1, len(CASES))
+    session["last_saved_case_index"] = idx
+    return jsonify({"status": "ok", "saved": True, "next": session["case_index"]})
 
-    record = {
-        "case_id":   CASES[idx]["id"] if idx < len(CASES) else None,
-        "diagnosis": data.get("diagnosis", ""),
-        "biomarkers": data.get("biomarkers", ""),
-    }
-    responses.append(record)
 
-    os.makedirs("saves", exist_ok=True)
-    if os.path.exists(RESPONSES_PATH):
-        with open(RESPONSES_PATH, "r") as f:
-            saved = json.load(f)
-            if not isinstance(saved, list):
-                saved = [saved]
-    else:
-        saved = []
+@app.route("/autosave", methods=["POST"])
+def autosave():
+    idx = session.get("case_index", 0)
+    if idx >= len(CASES):
+        return ("", 204)
 
-    saved.append(record)
+    if session.get("last_saved_case_index") == idx:
+        return ("", 204)
 
-    with open(RESPONSES_PATH, "w") as f:
-        json.dump(saved, f, indent=2)
+    data = request.get_json(silent=True)
+    if data is None and request.data:
+        try:
+            data = json.loads(request.data.decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            data = {}
+    if data is None:
+        data = {}
 
-    session["case_index"] = idx + 1
-    return jsonify({"status": "ok", "saved": True})
+    persist_case_response(idx, data)
+    session["case_index"] = min(idx + 1, len(CASES))
+    session["last_saved_case_index"] = idx
+    return ("", 204)
 
 @app.route('/reset', methods=['POST'])
 def reset():
     session.pop("case_index", None)
+    session.pop("last_saved_case_index", None)
     return "success"
 
 @app.route('/stop', methods=['POST'])
